@@ -1,0 +1,8 @@
+node_modules
+dist
+.DS_Store
+*.local
+.claude
+*.py
+src/WhackAMole/img/*.svg
+src/WhackAMole/img/hole.png
