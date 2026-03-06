@@ -13,6 +13,17 @@
   touch-action: manipulation;
   position: relative;
 
+  &__watermark {
+    position: absolute;
+    bottom: 14px;
+    right: 16px;
+    width: 72px;
+    opacity: 0.25;
+    pointer-events: none;
+    z-index: 10;
+    filter: invert(1);
+  }
+
   // Overlay / Modal
   &__overlay {
     position: absolute;

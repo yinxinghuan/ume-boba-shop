@@ -9,6 +9,7 @@ import hackerImg from './img/hacker.png';
 import ghostImg from './img/ghost.png';
 import coderImg from './img/coder.png';
 import { useLocale } from './i18n';
+import aigramLogo from './img/aigram.svg';
 import './WhackAMole.less';
 
 const DEFAULT_CHARACTERS: Character[] = [
@@ -59,6 +60,7 @@ const WhackAMole = React.memo(
 
     return (
       <div className="wam" ref={ref}>
+        <img className="wam__watermark" src={aigramLogo} alt="Aigram" draggable={false} />
         {showSplash && <SplashScreen onDone={() => setShowSplash(false)} />}
 
         {/* Start Modal */}
