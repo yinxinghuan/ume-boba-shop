@@ -1,4 +1,5 @@
 import React, { forwardRef } from 'react';
+import { useLocale } from '../i18n';
 import './ScoreBoard.less';
 
 export interface ScoreBoardProps {
@@ -12,6 +13,7 @@ export interface ScoreBoardProps {
 
 const ScoreBoard = React.memo(
   forwardRef<HTMLDivElement, ScoreBoardProps>((props, ref) => {
+    const { t } = useLocale();
     const {
       score = 0,
       timeLeft = 30,
@@ -28,18 +30,18 @@ const ScoreBoard = React.memo(
       <div className="wam-scoreboard" ref={ref}>
         <div className="wam-scoreboard__row">
           <div className="wam-scoreboard__score">
-            <span className="wam-scoreboard__label">得分</span>
+            <span className="wam-scoreboard__label">{t('scoreLabel')}</span>
             <span className="wam-scoreboard__value">{score}</span>
           </div>
           {combo >= 2 && (
             <div className="wam-scoreboard__combo">
               <span className="wam-scoreboard__combo-text">
-                {combo}连击!
+                {t('combo', { n: combo })}
               </span>
             </div>
           )}
           <div className="wam-scoreboard__best">
-            <span className="wam-scoreboard__label">最高</span>
+            <span className="wam-scoreboard__label">{t('bestLabel')}</span>
             <span className="wam-scoreboard__value">{highScore}</span>
           </div>
         </div>

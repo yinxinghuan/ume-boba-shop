@@ -1,5 +1,6 @@
 import React, { forwardRef, useCallback, useEffect, useRef, useState } from 'react';
 import type { HoleState } from '../types';
+import { t } from '../i18n';
 import './Hole.less';
 
 export interface HoleProps {
@@ -14,17 +15,18 @@ const defaultHole: HoleState = {
   isWhacked: false,
 };
 
-/** Character-specific whack lines */
-const WHACK_LINES: Record<string, string[]> = {
-  guitarist: ['我的吉他！', '走音了！', '别碰琴弦！'],
-  coder: ['咖啡洒了！', '代码没保存！', 'Bug警告！'],
-  hacker: ['眼镜歪了！', '防火墙破了！', '系统崩溃！'],
-  ghost: ['嘻嘻~扣分！', '中计啦！', '抓到我啦~'],
+/** Number of whack lines per character */
+const WHACK_LINE_COUNTS: Record<string, number> = {
+  guitarist: 3,
+  coder: 3,
+  hacker: 3,
+  ghost: 3,
 };
 
 const getRandomLine = (characterId: string): string => {
-  const lines = WHACK_LINES[characterId] || ['啊！'];
-  return lines[Math.floor(Math.random() * lines.length)];
+  const count = WHACK_LINE_COUNTS[characterId] ?? 1;
+  const idx = Math.floor(Math.random() * count);
+  return t(`whack.${characterId}.${idx}`);
 };
 
 interface FloatingEffect {
