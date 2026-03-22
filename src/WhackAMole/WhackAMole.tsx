@@ -78,9 +78,6 @@ const WhackAMole = React.memo(
     return (
       <div className="wam" ref={ref}>
         <img className="wam__watermark" src={aigramLogo} alt="Aigram" draggable={false} />
-        {!isPlaying && !isGameOver && (
-          <button className="wam__lb-icon" onPointerDown={() => setShowLeaderboard(true)}>🏆</button>
-        )}
         {showSplash && <SplashScreen onDone={() => setShowSplash(false)} />}
         {showLeaderboard && (
           <Leaderboard
@@ -135,6 +132,7 @@ const WhackAMole = React.memo(
               {highScore > 0 && (
                 <p className="wam__modal-highscore">{t('highRecord', { n: highScore })}</p>
               )}
+              <button className="wam__lb-icon" onPointerDown={() => setShowLeaderboard(true)}>🏆</button>
             </div>
           </div>
         )}
