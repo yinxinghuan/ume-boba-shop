@@ -1,11 +1,10 @@
 import React, { forwardRef, useCallback, useState } from 'react';
 import type { WhackAMoleProps, Character } from './types';
 import { useWhackAMole } from './hooks/useWhackAMole';
-import { useGameScore } from './hooks/useGameScore';
+import { useGameScore, Leaderboard } from '@shared/leaderboard';
 import ScoreBoard from './components/ScoreBoard';
 import GameBoard from './components/GameBoard';
 import SplashScreen from './components/SplashScreen';
-import Leaderboard from './components/Leaderboard';
 import guitaristImg from './img/guitarist.png';
 import guitaristSurprisedImg from './img/guitarist_surprised.png';
 import hackerImg from './img/hacker.png';
