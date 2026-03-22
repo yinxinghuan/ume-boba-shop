@@ -82,6 +82,7 @@ const WhackAMole = React.memo(
         {showSplash && <SplashScreen onDone={() => setShowSplash(false)} />}
         {showLeaderboard && (
           <Leaderboard
+            gameName="Whack-A-Mole"
             isInAigram={isInAigram}
             onClose={() => setShowLeaderboard(false)}
             fetchGlobal={fetchGlobalLeaderboard}
