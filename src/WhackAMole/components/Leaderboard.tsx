@@ -65,7 +65,9 @@ export default function Leaderboard({ isInAigram, onClose, fetchGlobal, fetchFri
           {loading && <div className="wam-lb__loading">⏳</div>}
           {!loading && error && <div className="wam-lb__empty">{t('lb.error')}</div>}
           {!loading && !error && entries.length === 0 && (
-            <div className="wam-lb__empty">{t('lb.empty')}</div>
+            <div className="wam-lb__empty">
+              {tab === 'friends' ? t('lb.emptyFriends') : t('lb.empty')}
+            </div>
           )}
           {!loading && !error && entries.map((entry, i) => (
             <div

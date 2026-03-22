@@ -122,19 +122,23 @@ export function useGameScore(gameId: string) {
     return json.leaderboard.map(e => ({ ...e, isMe: e.telegram_id === telegramId }));
   }, [gameId, telegramId]);
 
-  // 好友排行榜（含自己）
+  // 好友排行榜（含自己）— 任何错误都降级为空数组
   const fetchFriendsLeaderboard = useCallback(async (): Promise<LeaderboardEntry[]> => {
     if (!isInAigram || !telegramId || !apiOrigin) return [];
-    const contacts = await callAigramAPI<AigramResponse<AigramUser[]>>(
-      apiOrigin,
-      `/note/telegram/user/contact/list?telegram_id=${telegramId}`
-    );
-    const ids = [telegramId, ...contacts.data.map(f => f.telegram_id)].join(',');
-    const res = await fetch(
-      `${GAMES_API}/leaderboard?game_id=${gameId}&telegram_ids=${encodeURIComponent(ids)}`
-    );
-    const json = await res.json() as { leaderboard: LeaderboardEntry[] };
-    return json.leaderboard.map(e => ({ ...e, isMe: e.telegram_id === telegramId }));
+    try {
+      const contacts = await callAigramAPI<AigramResponse<AigramUser[]>>(
+        apiOrigin,
+        `/note/telegram/user/contact/list?telegram_id=${telegramId}`
+      );
+      const ids = [telegramId, ...contacts.data.map(f => f.telegram_id)].join(',');
+      const res = await fetch(
+        `${GAMES_API}/leaderboard?game_id=${gameId}&telegram_ids=${encodeURIComponent(ids)}`
+      );
+      const json = await res.json() as { leaderboard: LeaderboardEntry[] };
+      return json.leaderboard.map(e => ({ ...e, isMe: e.telegram_id === telegramId }));
+    } catch {
+      return [];
+    }
   }, [gameId, telegramId, apiOrigin, isInAigram]);
 
   return {
