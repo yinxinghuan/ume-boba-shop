@@ -92,7 +92,8 @@ export default function DrinkRow({ def, dp, progress, canAffordBuy, onTap, onBuy
         onPointerDown={e => { e.stopPropagation(); onBuy() }}
       >
         <div className="dr__buy-inner">
-          <span className="dr__buy-qty">{dp.qty === 0 ? '开业' : '+1'}</span>
+          <span className="dr__buy-arrow">↑</span>
+          <div className="dr__buy-tear" />
           <span className="dr__buy-price">{fmtUSD(nextCost)}</span>
         </div>
       </button>

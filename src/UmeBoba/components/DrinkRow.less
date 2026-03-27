@@ -170,7 +170,7 @@
     &:active { color: @gold; }
   }
 
-  // ── Buy button ────────────────────────────────────────────────────────────
+  // ── Buy button (ticket shape) ─────────────────────────────────────────────
   &__buy {
     width: 76px;
     flex-shrink: 0;
@@ -185,69 +185,76 @@
     transition: transform 0.1s;
 
     &-inner {
+      position: relative;
+      width: 58px;
       display: flex;
       flex-direction: column;
       align-items: center;
       justify-content: center;
-      gap: 2px;
-      width: 56px;
-      min-height: 56px;
-      border-radius: 18px;
-      padding: 8px 4px;
-      // locked state
-      border: 3px solid rgba(255,255,255,0.12);
-      background: rgba(255,255,255,0.05);
-      color: rgba(255,255,255,0.2);
-      box-shadow: 0 3px 0 rgba(0,0,0,0.4);
-      transition: background 0.12s, border-color 0.12s, box-shadow 0.12s, color 0.12s;
-      position: relative;
+      gap: 0;
+      border-radius: 8px;
       overflow: hidden;
+      // inactive
+      background: rgba(255,255,255,0.07);
+      color: rgba(255,255,255,0.22);
+      box-shadow: 0 3px 0 rgba(0,0,0,0.35);
+      transition: background 0.12s, color 0.12s, box-shadow 0.12s;
+      // ticket notch: cut semicircles into left & right at 50%
+      -webkit-mask-image:
+        radial-gradient(circle at 0%   50%, transparent 8px, black 8.5px),
+        radial-gradient(circle at 100% 50%, transparent 8px, black 8.5px);
+      -webkit-mask-composite: destination-in;
+      mask-image:
+        radial-gradient(circle at 0%   50%, transparent 8px, black 8.5px),
+        radial-gradient(circle at 100% 50%, transparent 8px, black 8.5px);
+      mask-composite: intersect;
     }
 
-    // glossy top sheen (sticker highlight)
-    &-inner::after {
-      content: '';
-      position: absolute;
-      top: 0; left: 0; right: 0;
-      height: 45%;
-      background: linear-gradient(180deg, rgba(255,255,255,0.22) 0%, transparent 100%);
-      border-radius: 15px 15px 50% 50%;
-      pointer-events: none;
-    }
-
-    // active / affordable state → gold sticker
     &--on &-inner {
-      background: linear-gradient(160deg, #ffe566 0%, #ffaa00 100%);
-      border: 3px solid #fff;
-      color: #7a4400;
+      background: var(--accent, #ffaa00);
+      color: rgba(0,0,0,0.75);
       box-shadow:
-        0 4px 0 #b87000,           // physical bottom shadow
-        0 6px 16px rgba(255,170,0,0.4),  // glow
-        inset 0 1px 0 rgba(255,255,255,0.5); // inner top light
+        0 4px 0 color-mix(in srgb, var(--accent, #ffaa00) 60%, black),
+        0 0 18px rgba(0,0,0,0.3);
     }
 
     &:active { transform: scale(0.88); }
-    &--on:active &-inner { box-shadow: 0 1px 0 #b87000, 0 2px 8px rgba(255,170,0,0.3); }
   }
 
-  &__buy-qty {
-    font-size: 19px;
-    font-weight: 900;
-    line-height: 1;
-    position: relative;
-    z-index: 1;
-    .dr__buy--on & { text-shadow: 0 1px 0 rgba(255,255,255,0.5); }
-  }
-
-  &__buy-price {
-    font-size: 10px;
-    font-weight: 800;
+  // arrow icon (top half)
+  &__buy-arrow {
+    display: block;
+    width: 100%;
     text-align: center;
+    font-size: 22px;
+    line-height: 1;
+    padding: 10px 0 8px;
+  }
+
+  // dashed tear line
+  &__buy-tear {
+    width: 100%;
+    height: 1px;
+    background: repeating-linear-gradient(
+      90deg,
+      currentColor 0px, currentColor 4px,
+      transparent 4px, transparent 8px
+    );
+    opacity: 0.4;
+    flex-shrink: 0;
+  }
+
+  // price (bottom half)
+  &__buy-price {
+    display: block;
+    width: 100%;
+    text-align: center;
+    font-size: 13px;
+    font-weight: 900;
+    padding: 7px 4px 10px;
     white-space: nowrap;
     overflow: hidden;
-    max-width: 52px;
     text-overflow: ellipsis;
-    position: relative;
-    z-index: 1;
+    letter-spacing: -0.3px;
   }
 }
