@@ -3,6 +3,22 @@ import type { DrinkDef, DrinkProgress } from '../types'
 import { buyCost, cycleMs, fmtUSD, fmtMs, incomePerCycle } from '../constants'
 import './DrinkRow.less'
 
+import imgPearl     from '../img/drink_pearl_milk_tea.png'
+import imgWatermelon from '../img/drink_watermelon.png'
+import imgMango     from '../img/drink_mango.png'
+import imgLemon     from '../img/drink_lemon.png'
+import imgAvocado   from '../img/drink_avocado.png'
+import imgAngel     from '../img/drink_angel.png'
+
+const DRINK_IMGS: Record<string, string> = {
+  pearl_milk_tea: imgPearl,
+  watermelon:     imgWatermelon,
+  mango:          imgMango,
+  lemon:          imgLemon,
+  avocado:        imgAvocado,
+  angel:          imgAngel,
+}
+
 interface Props {
   def: DrinkDef
   dp: DrinkProgress
@@ -31,7 +47,7 @@ export default function DrinkRow({ def, dp, progress, canAffordBuy, onTap, onBuy
     >
       {/* ── Icon ── */}
       <div className="dr__icon">
-        <span className="dr__emoji">{def.emoji}</span>
+        <img src={DRINK_IMGS[def.id]} alt={def.nameZh} draggable={false} className="dr__img" />
         {dp.qty > 0 && <div className="dr__qty">{dp.qty}</div>}
         {dp.hasManager && <span className="dr__star">⚡</span>}
       </div>
