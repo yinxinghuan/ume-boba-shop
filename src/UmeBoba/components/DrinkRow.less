@@ -116,7 +116,7 @@
 
   // Progress bar
   &__bar-track {
-    height: 20px;
+    height: 24px;
     background: rgba(255,255,255,0.07);
     border-radius: 6px;
     overflow: hidden;
@@ -160,19 +160,22 @@
     &--dim { color: rgba(0,0,0,0.55); font-weight: 800; }
   }
 
-  // Hire staff
-  &__hire {
-    font-size: 11px;
-    font-weight: 700;
-    color: rgba(255,215,0,0.45);
-    cursor: pointer;
-    touch-action: none;
-    &:active { color: @gold; }
+  // ── Tickets column (right) ────────────────────────────────────────────────
+  &__tickets {
+    width: 76px;
+    flex-shrink: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 5px;
+    padding: 8px 0;
+    border-left: 1px solid rgba(255,255,255,0.06);
   }
 
-  // ── Buy button (ticket shape) ─────────────────────────────────────────────
+  // ── Buy ticket (horizontal) ───────────────────────────────────────────────
   &__buy {
-    width: 76px;
+    width: 66px;
     flex-shrink: 0;
     display: flex;
     align-items: center;
@@ -183,15 +186,15 @@
     touch-action: none;
     -webkit-tap-highlight-color: transparent;
     transition: transform 0.1s;
+    padding: 0;
 
     &-inner {
       position: relative;
-      width: 58px;
+      width: 100%;
+      height: 38px;
       display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      gap: 0;
+      flex-direction: row;
+      align-items: stretch;
       border-radius: 8px;
       overflow: hidden;
       // inactive
@@ -199,14 +202,14 @@
       color: rgba(255,255,255,0.22);
       box-shadow: 0 3px 0 rgba(0,0,0,0.35);
       transition: background 0.12s, color 0.12s, box-shadow 0.12s;
-      // ticket notch: cut semicircles into left & right at 50%
+      // ticket notch: cut semicircles into top & bottom at tear line (38%)
       -webkit-mask-image:
-        radial-gradient(circle at 0%   50%, transparent 8px, black 8.5px),
-        radial-gradient(circle at 100% 50%, transparent 8px, black 8.5px);
+        radial-gradient(circle at 38% 0%,   transparent 6px, black 6.5px),
+        radial-gradient(circle at 38% 100%, transparent 6px, black 6.5px);
       -webkit-mask-composite: destination-in;
       mask-image:
-        radial-gradient(circle at 0%   50%, transparent 8px, black 8.5px),
-        radial-gradient(circle at 100% 50%, transparent 8px, black 8.5px);
+        radial-gradient(circle at 38% 0%,   transparent 6px, black 6.5px),
+        radial-gradient(circle at 38% 100%, transparent 6px, black 6.5px);
       mask-composite: intersect;
     }
 
@@ -214,47 +217,113 @@
       background: var(--accent, #ffaa00);
       color: rgba(0,0,0,0.75);
       box-shadow:
-        0 4px 0 color-mix(in srgb, var(--accent, #ffaa00) 60%, black),
-        0 0 18px rgba(0,0,0,0.3);
+        0 3px 0 color-mix(in srgb, var(--accent, #ffaa00) 60%, black),
+        0 0 14px rgba(0,0,0,0.25);
     }
 
     &:active { transform: scale(0.88); }
   }
 
-  // arrow icon (top half)
+  // Arrow section (left of tear)
   &__buy-arrow {
-    display: block;
-    width: 100%;
-    text-align: center;
-    font-size: 22px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 24px;
+    flex-shrink: 0;
+    font-size: 18px;
     line-height: 1;
-    padding: 10px 0 8px;
   }
 
-  // dashed tear line
+  // Vertical dashed tear line
   &__buy-tear {
-    width: 100%;
-    height: 1px;
+    width: 1px;
+    align-self: stretch;
     background: repeating-linear-gradient(
-      90deg,
-      currentColor 0px, currentColor 4px,
-      transparent 4px, transparent 8px
+      180deg,
+      currentColor 0px, currentColor 3px,
+      transparent 3px, transparent 6px
     );
     opacity: 0.4;
     flex-shrink: 0;
   }
 
-  // price (bottom half)
+  // Price section (right of tear)
   &__buy-price {
-    display: block;
-    width: 100%;
-    text-align: center;
-    font-size: 13px;
+    flex: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 12px;
     font-weight: 900;
-    padding: 7px 4px 10px;
+    padding: 0 4px 0 5px;
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
     letter-spacing: -0.3px;
+  }
+
+  // ── Hire staff ticket ─────────────────────────────────────────────────────
+  &__hire-ticket {
+    width: 66px;
+    height: 32px;
+    display: flex;
+    flex-direction: row;
+    align-items: stretch;
+    border-radius: 8px;
+    overflow: hidden;
+    background: rgba(255,215,0,0.07);
+    color: rgba(255,215,0,0.55);
+    cursor: pointer;
+    touch-action: none;
+    -webkit-tap-highlight-color: transparent;
+    box-shadow: 0 2px 0 rgba(0,0,0,0.25);
+    transition: background 0.12s, color 0.12s;
+    -webkit-mask-image:
+      radial-gradient(circle at 38% 0%,   transparent 6px, black 6.5px),
+      radial-gradient(circle at 38% 100%, transparent 6px, black 6.5px);
+    -webkit-mask-composite: destination-in;
+    mask-image:
+      radial-gradient(circle at 38% 0%,   transparent 6px, black 6.5px),
+      radial-gradient(circle at 38% 100%, transparent 6px, black 6.5px);
+    mask-composite: intersect;
+
+    &:active {
+      background: rgba(255,215,0,0.15);
+      color: @gold;
+    }
+  }
+
+  &__hire-char {
+    width: 24px;
+    flex-shrink: 0;
+    height: 100%;
+    object-fit: cover;
+    object-position: top center;
+  }
+
+  &__hire-tear {
+    width: 1px;
+    align-self: stretch;
+    background: repeating-linear-gradient(
+      180deg,
+      currentColor 0px, currentColor 3px,
+      transparent 3px, transparent 6px
+    );
+    opacity: 0.4;
+    flex-shrink: 0;
+  }
+
+  &__hire-cost {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 10px;
+    font-weight: 800;
+    padding: 0 3px 0 4px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
   }
 }

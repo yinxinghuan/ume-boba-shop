@@ -19,6 +19,24 @@ const DRINK_IMGS: Record<string, string> = {
   angel:          imgAngel,
 }
 
+const GUIDE_SPRITES: Record<string, string> = import.meta.glob(
+  '../img/guides/*.png', { eager: true, import: 'default' }
+) as Record<string, string>
+
+const MANAGER_CHARS: Record<string, string> = {
+  pearl_milk_tea: 'bubblepearl',
+  watermelon:     'melonmick',
+  mango:          'mangochick',
+  lemon:          'lemonshark',
+  avocado:        'guacpiggy',
+  angel:          'yoome',
+}
+
+function getManagerSprite(drinkId: string): string {
+  const char = MANAGER_CHARS[drinkId] ?? 'bubblepearl'
+  return GUIDE_SPRITES[`../img/guides/${char}_happy.png`] ?? ''
+}
+
 interface Props {
   def: DrinkDef
   dp: DrinkProgress
@@ -76,27 +94,40 @@ export default function DrinkRow({ def, dp, progress, canAffordBuy, onTap, onBuy
         ) : (
           <div className="dr__bar-empty" />
         )}
+      </div>
 
-        {/* hire staff */}
+      {/* ── Tickets column (right) ── */}
+      <div className="dr__tickets">
+        {/* Buy ticket (horizontal) */}
+        <button
+          ref={buyRef}
+          className={`dr__buy ${canAffordBuy ? 'dr__buy--on' : ''}`}
+          onPointerDown={e => { e.stopPropagation(); onBuy() }}
+        >
+          <div className="dr__buy-inner">
+            <span className="dr__buy-arrow">↑</span>
+            <div className="dr__buy-tear" />
+            <span className="dr__buy-price">{fmtUSD(nextCost)}</span>
+          </div>
+        </button>
+
+        {/* Hire staff ticket */}
         {!dp.hasManager && dp.qty > 0 && (
-          <div className="dr__hire" onPointerDown={e => { e.stopPropagation(); onManager() }}>
-            招店员 {fmtUSD(def.managerCost)}
+          <div
+            className="dr__hire-ticket"
+            onPointerDown={e => { e.stopPropagation(); onManager() }}
+          >
+            <img
+              src={getManagerSprite(def.id)}
+              alt=""
+              draggable={false}
+              className="dr__hire-char"
+            />
+            <div className="dr__hire-tear" />
+            <span className="dr__hire-cost">{fmtUSD(def.managerCost)}</span>
           </div>
         )}
       </div>
-
-      {/* ── Buy button (right) ── */}
-      <button
-        ref={buyRef}
-        className={`dr__buy ${canAffordBuy ? 'dr__buy--on' : ''}`}
-        onPointerDown={e => { e.stopPropagation(); onBuy() }}
-      >
-        <div className="dr__buy-inner">
-          <span className="dr__buy-arrow">↑</span>
-          <div className="dr__buy-tear" />
-          <span className="dr__buy-price">{fmtUSD(nextCost)}</span>
-        </div>
-      </button>
     </div>
   )
 }
