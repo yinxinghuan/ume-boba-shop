@@ -170,12 +170,14 @@
     position: relative;
   }
 
-  &__locked-emoji {
-    font-size: 28px;
-    width: 72px;
-    text-align: center;
+  &__locked-img {
+    width: 52px;
+    height: 52px;
+    object-fit: contain;
     flex-shrink: 0;
-    filter: grayscale(1);
+    margin: 0 10px;
+    filter: grayscale(1) brightness(0.6);
+    pointer-events: none;
   }
 
   &__locked-name {

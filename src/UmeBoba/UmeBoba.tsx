@@ -19,7 +19,22 @@ import type { GameSave } from './types'
 import imgBgShop from './img/bg_shop.png'
 import imgUme from './img/ume_counter.png'
 import imgLogo from './img/ume_logo.png'
+import imgDrinkPearl      from './img/drink_pearl_milk_tea.png'
+import imgDrinkWatermelon from './img/drink_watermelon.png'
+import imgDrinkMango      from './img/drink_mango.png'
+import imgDrinkLemon      from './img/drink_lemon.png'
+import imgDrinkAvocado    from './img/drink_avocado.png'
+import imgDrinkAngel      from './img/drink_angel.png'
 import './UmeBoba.less'
+
+const DRINK_IMGS: Record<string, string> = {
+  pearl_milk_tea: imgDrinkPearl,
+  watermelon:     imgDrinkWatermelon,
+  mango:          imgDrinkMango,
+  lemon:          imgDrinkLemon,
+  avocado:        imgDrinkAvocado,
+  angel:          imgDrinkAngel,
+}
 
 type Screen = 'splash' | 'start' | 'playing'
 
@@ -207,7 +222,7 @@ export default function UmeBoba() {
 
         {nextDrink && (
           <div className="ub__locked-row">
-            <span className="ub__locked-emoji">{nextDrink.emoji}</span>
+            <img src={DRINK_IMGS[nextDrink.id]} alt={nextDrink.nameZh} draggable={false} className="ub__locked-img" />
             <div>
               <div className="ub__locked-name">{nextDrink.nameZh}</div>
               <div className="ub__locked-hint">店铺升级后解锁 · {fmtUSD(nextDrink.unlockCost)} 总收入</div>
