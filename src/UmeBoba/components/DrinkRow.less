@@ -2,14 +2,19 @@
 @pink:  #f8a4c8;
 @pink2: #e8709c;
 
+// Tear line positions (stubs: ~20% | ~55% | 25%)
+// First tear at 20%, second tear at 75%
+@tear1: 20%;
+@tear2: 75%;
+@notch-r: 7px;
+@notch-r-px: 7.5px;
+
 .dr {
   display: flex;
-  align-items: stretch;
+  flex-direction: column;
   border-bottom: 1px solid rgba(255,255,255,0.07);
-  touch-action: none;
   -webkit-tap-highlight-color: transparent;
   user-select: none;
-  min-height: 88px;
   position: relative;
 
   &--ready {
@@ -20,9 +25,16 @@
     }
   }
   &--waiting { opacity: 0.7; }
-  &:active    { background: rgba(255,255,255,0.04); }
 
-  // ── Icon ─────────────────────────────────────────────────────────────────
+  // ── Top row: icon + info ──────────────────────────────────────────────────
+  &__top {
+    display: flex;
+    align-items: stretch;
+    touch-action: none;
+    min-height: 72px;
+    &:active { background: rgba(255,255,255,0.03); }
+  }
+
   &__icon {
     width: 72px;
     flex-shrink: 0;
@@ -31,46 +43,39 @@
     align-items: center;
     justify-content: center;
     gap: 5px;
-    padding: 12px 0;
+    padding: 10px 0;
     border-right: 1px solid rgba(255,255,255,0.06);
     position: relative;
   }
 
   &__img {
-    width: 52px;
-    height: 52px;
+    width: 48px;
+    height: 48px;
     object-fit: contain;
     pointer-events: none;
     filter: drop-shadow(0 2px 6px rgba(0,0,0,0.45));
   }
 
   &__qty {
-    font-size: 12px;
+    font-size: 11px;
     font-weight: 900;
     color: rgba(255,255,255,0.7);
     background: rgba(255,255,255,0.1);
     border-radius: 7px;
-    padding: 1px 7px;
-    min-width: 28px;
+    padding: 1px 6px;
+    min-width: 26px;
     text-align: center;
     .dr--ready & { background: rgba(255,215,0,0.2); color: @gold; }
   }
 
-  &__star {
-    position: absolute;
-    top: 8px; right: 6px;
-    font-size: 14px;
-  }
-
-  // ── Center ───────────────────────────────────────────────────────────────
   &__center {
     flex: 1;
     min-width: 0;
     display: flex;
     flex-direction: column;
     justify-content: center;
-    gap: 6px;
-    padding: 10px 10px;
+    gap: 5px;
+    padding: 8px 12px;
   }
 
   &__meta {
@@ -109,14 +114,9 @@
     text-overflow: ellipsis;
   }
 
-  &__locked-hint {
-    font-size: 11px;
-    color: rgba(255,255,255,0.25);
-  }
-
   // Progress bar
   &__bar-track {
-    height: 24px;
+    height: 22px;
     background: rgba(255,255,255,0.07);
     border-radius: 6px;
     overflow: hidden;
@@ -142,7 +142,7 @@
   }
 
   &__bar-empty {
-    height: 8px;
+    height: 7px;
     background: rgba(255,255,255,0.05);
     border-radius: 4px;
   }
@@ -160,170 +160,179 @@
     &--dim { color: rgba(0,0,0,0.55); font-weight: 800; }
   }
 
-  // ── Tickets column (right) ────────────────────────────────────────────────
-  &__tickets {
-    width: 76px;
-    flex-shrink: 0;
+  // ── Bottom: 3-part ticket ─────────────────────────────────────────────────
+  &__bottom {
+    padding: 4px 10px 10px;
+  }
+
+  &__ticket {
+    display: flex;
+    flex-direction: row;
+    align-items: stretch;
+    height: 48px;
+    border-radius: 10px;
+    overflow: hidden;
+    background: rgba(255,255,255,0.06);
+    color: rgba(255,255,255,0.3);
+    box-shadow: 0 3px 0 rgba(0,0,0,0.3), inset 0 1px 0 rgba(255,255,255,0.05);
+    position: relative;
+
+    // Notch cutouts at both tear lines (top and bottom)
+    -webkit-mask-image:
+      radial-gradient(circle at @tear1 0%,   transparent @notch-r, black @notch-r-px),
+      radial-gradient(circle at @tear1 100%, transparent @notch-r, black @notch-r-px),
+      radial-gradient(circle at @tear2 0%,   transparent @notch-r, black @notch-r-px),
+      radial-gradient(circle at @tear2 100%, transparent @notch-r, black @notch-r-px);
+    -webkit-mask-composite: destination-in, destination-in, destination-in;
+    mask-image:
+      radial-gradient(circle at @tear1 0%,   transparent @notch-r, black @notch-r-px),
+      radial-gradient(circle at @tear1 100%, transparent @notch-r, black @notch-r-px),
+      radial-gradient(circle at @tear2 0%,   transparent @notch-r, black @notch-r-px),
+      radial-gradient(circle at @tear2 100%, transparent @notch-r, black @notch-r-px);
+    mask-composite: intersect, intersect, intersect;
+
+    // Buy stub lit up when affordable
+    &--buyable .dr__stub--buy {
+      background: var(--accent, #ffaa00);
+      color: rgba(0,0,0,0.8);
+      box-shadow: inset 0 1px 0 rgba(255,255,255,0.25);
+    }
+  }
+
+  // ── Stub base ─────────────────────────────────────────────────────────────
+  &__stub {
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    gap: 5px;
-    padding: 8px 0;
-    border-left: 1px solid rgba(255,255,255,0.06);
-  }
-
-  // ── Buy ticket (horizontal) ───────────────────────────────────────────────
-  &__buy {
-    width: 66px;
-    flex-shrink: 0;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    border: none;
+    gap: 2px;
     background: transparent;
-    cursor: pointer;
+    border: none;
+    cursor: default;
     touch-action: none;
     -webkit-tap-highlight-color: transparent;
-    transition: transform 0.1s;
-    padding: 0;
+    transition: background 0.12s, color 0.12s;
 
-    &-inner {
-      position: relative;
-      width: 100%;
-      height: 38px;
-      display: flex;
-      flex-direction: row;
-      align-items: stretch;
-      border-radius: 8px;
-      overflow: hidden;
-      // inactive
-      background: rgba(255,255,255,0.07);
-      color: rgba(255,255,255,0.22);
-      box-shadow: 0 3px 0 rgba(0,0,0,0.35);
-      transition: background 0.12s, color 0.12s, box-shadow 0.12s;
-      // ticket notch: cut semicircles into top & bottom at tear line (38%)
-      -webkit-mask-image:
-        radial-gradient(circle at 38% 0%,   transparent 6px, black 6.5px),
-        radial-gradient(circle at 38% 100%, transparent 6px, black 6.5px);
-      -webkit-mask-composite: destination-in;
-      mask-image:
-        radial-gradient(circle at 38% 0%,   transparent 6px, black 6.5px),
-        radial-gradient(circle at 38% 100%, transparent 6px, black 6.5px);
-      mask-composite: intersect;
+    // Stub 1: quantity (~20%)
+    &--qty {
+      flex: 1.4;
+      color: rgba(255,255,255,0.35);
     }
 
-    &--on &-inner {
-      background: var(--accent, #ffaa00);
-      color: rgba(0,0,0,0.75);
-      box-shadow:
-        0 3px 0 color-mix(in srgb, var(--accent, #ffaa00) 60%, black),
-        0 0 14px rgba(0,0,0,0.25);
+    // Stub 2: buy action (~55%)
+    &--buy {
+      flex: 3;
+      cursor: pointer;
+      transition: background 0.12s, color 0.12s, transform 0.1s;
+      &:active { transform: scale(0.92); }
     }
 
-    &:active { transform: scale(0.88); }
+    // Stub 3: staff (~25%)
+    &--staff {
+      flex: 2;
+      cursor: pointer;
+
+      &--locked {
+        opacity: 0.35;
+        cursor: default;
+        pointer-events: none;
+      }
+
+      &--hired {
+        cursor: default;
+        background: rgba(100,220,120,0.1);
+        color: rgba(100,220,120,0.8);
+      }
+    }
   }
 
-  // Arrow section (left of tear)
-  &__buy-arrow {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    width: 24px;
-    flex-shrink: 0;
-    font-size: 18px;
-    line-height: 1;
-  }
-
-  // Vertical dashed tear line
-  &__buy-tear {
+  // ── Vertical tear line ────────────────────────────────────────────────────
+  &__tear {
     width: 1px;
     align-self: stretch;
+    flex-shrink: 0;
     background: repeating-linear-gradient(
       180deg,
       currentColor 0px, currentColor 3px,
-      transparent 3px, transparent 6px
+      transparent 3px, transparent 7px
     );
-    opacity: 0.4;
-    flex-shrink: 0;
+    opacity: 0.25;
   }
 
-  // Price section (right of tear)
-  &__buy-price {
-    flex: 1;
-    display: flex;
-    align-items: center;
-    justify-content: center;
+  // ── Stub 1 content: quantity ──────────────────────────────────────────────
+  &__stub-qty-num {
+    font-size: 16px;
+    font-weight: 900;
+    letter-spacing: -0.5px;
+    .dr--ready & { color: @gold; }
+  }
+
+  // ── Stub 2 content: buy ───────────────────────────────────────────────────
+  &__stub-arrow {
+    font-size: 18px;
+    line-height: 1;
+    font-weight: 900;
+  }
+
+  &__stub-price {
     font-size: 12px;
     font-weight: 900;
-    padding: 0 4px 0 5px;
+    letter-spacing: -0.3px;
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
-    letter-spacing: -0.3px;
+    max-width: 100%;
+    padding: 0 4px;
   }
 
-  // ── Hire staff ticket ─────────────────────────────────────────────────────
-  &__hire-ticket {
-    width: 66px;
-    height: 32px;
-    display: flex;
-    flex-direction: row;
-    align-items: stretch;
-    border-radius: 8px;
+  // ── Stub 3 content: staff ─────────────────────────────────────────────────
+  &__staff-avatar {
+    position: relative;
+    width: 28px;
+    height: 28px;
+    flex-shrink: 0;
+    border-radius: 50%;
     overflow: hidden;
-    background: rgba(255,215,0,0.07);
-    color: rgba(255,215,0,0.55);
-    cursor: pointer;
-    touch-action: none;
-    -webkit-tap-highlight-color: transparent;
-    box-shadow: 0 2px 0 rgba(0,0,0,0.25);
-    transition: background 0.12s, color 0.12s;
-    -webkit-mask-image:
-      radial-gradient(circle at 38% 0%,   transparent 6px, black 6.5px),
-      radial-gradient(circle at 38% 100%, transparent 6px, black 6.5px);
-    -webkit-mask-composite: destination-in;
-    mask-image:
-      radial-gradient(circle at 38% 0%,   transparent 6px, black 6.5px),
-      radial-gradient(circle at 38% 100%, transparent 6px, black 6.5px);
-    mask-composite: intersect;
-
-    &:active {
-      background: rgba(255,215,0,0.15);
-      color: @gold;
+    border: 1.5px solid rgba(255,215,0,0.3);
+    .dr__stub--hired & {
+      border-color: rgba(100,220,120,0.5);
+    }
+    .dr__stub--locked & {
+      filter: grayscale(1);
     }
   }
 
-  &__hire-char {
-    width: 24px;
-    flex-shrink: 0;
+  &__staff-img {
+    width: 100%;
     height: 100%;
     object-fit: cover;
     object-position: top center;
+    pointer-events: none;
   }
 
-  &__hire-tear {
-    width: 1px;
-    align-self: stretch;
-    background: repeating-linear-gradient(
-      180deg,
-      currentColor 0px, currentColor 3px,
-      transparent 3px, transparent 6px
-    );
-    opacity: 0.4;
-    flex-shrink: 0;
-  }
-
-  &__hire-cost {
-    flex: 1;
+  &__staff-check {
+    position: absolute;
+    inset: 0;
     display: flex;
     align-items: center;
     justify-content: center;
+    font-size: 14px;
+    font-weight: 900;
+    background: rgba(30,180,60,0.7);
+    color: white;
+  }
+
+  &__staff-label {
     font-size: 10px;
     font-weight: 800;
-    padding: 0 3px 0 4px;
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
+    max-width: 100%;
+    padding: 0 3px;
+    text-align: center;
+    color: rgba(255,215,0,0.6);
+    .dr__stub--hired & { color: rgba(100,220,120,0.9); }
+    .dr__stub--locked & { color: rgba(255,255,255,0.2); }
   }
 }
