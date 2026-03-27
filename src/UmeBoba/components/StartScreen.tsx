@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
-import imgLogo from '../img/ume_logo.png'
-import imgUme  from '../img/ume_counter.png'
+import imgPoster from '../img/poster.png'
+import imgUme    from '../img/ume_counter.png'
 import { fmt } from '../constants'
 import Leaderboard from './Leaderboard'
 import type { LeaderboardEntry } from '../hooks/useGameScore'
@@ -25,52 +25,41 @@ export default function StartScreen({
   return (
     <div className="ss">
 
-      {/* Floating pearl bubbles */}
-      <div className="ss__bubbles">
-        {Array.from({ length: 8 }, (_, i) => (
-          <div key={i} className={`ss__bubble ss__bubble--${i + 1}`} />
-        ))}
+      {/* Blurred background */}
+      <div className="ss__bg" style={{ backgroundImage: `url(${imgPoster})` }} />
+
+      {/* Poster cover art */}
+      <div className="ss__hero">
+        <img src={imgPoster} alt="BOBA RUSH" draggable={false} className="ss__poster" />
       </div>
 
-      {/* Logo */}
-      <img src={imgLogo} alt="UMe California" draggable={false} className="ss__logo" />
-
-      {/* Character */}
-      <img src={imgUme} alt="" draggable={false} className="ss__char" />
-
-      {/* Bottom card */}
-      <div className="ss__card">
-        {/* Player info */}
+      {/* Bottom panel */}
+      <div className="ss__panel">
+        {/* Player row */}
         <div className="ss__player">
           <img
             src={playerAvatar ?? imgUme}
-            alt=""
-            draggable={false}
+            alt="" draggable={false}
             className="ss__avatar"
           />
           <div className="ss__player-info">
             <div className="ss__name">{playerName ?? 'UMe 奶茶师'}</div>
             {bestScore > 0 && (
-              <div className="ss__best">最高收入 🧋 {fmt(bestScore)}</div>
+              <div className="ss__best">💰 最高收入 {fmt(bestScore)}</div>
             )}
           </div>
+          <button className="ss__lb-icon" onPointerDown={() => setShowLb(true)}>🏆</button>
         </div>
 
         {/* Play button */}
         <button className="ss__play" onPointerDown={onPlay}>
           {bestScore > 0 ? '继续营业 🧋' : '开始营业 🧋'}
         </button>
-
-        {/* Leaderboard button */}
-        <button className="ss__lb-btn" onPointerDown={() => setShowLb(true)}>
-          🏆 排行榜
-        </button>
       </div>
 
-      {/* Leaderboard modal */}
       {showLb && (
         <Leaderboard
-          gameName="UMe 珍珠奶茶小铺"
+          gameName="BOBA RUSH"
           isInAigram={isInAigram}
           onClose={() => setShowLb(false)}
           fetchGlobal={fetchGlobal}
