@@ -1,0 +1,229 @@
+@gold:  #ffd700;
+@pink:  #f8a4c8;
+@pink2: #e8709c;
+
+.dr {
+  display: flex;
+  align-items: stretch;
+  border-bottom: 1px solid rgba(255,255,255,0.07);
+  touch-action: none;
+  -webkit-tap-highlight-color: transparent;
+  user-select: none;
+  min-height: 88px;
+  position: relative;
+
+  &--ready {
+    animation: dr-ready 1.2s ease-in-out infinite alternate;
+    @keyframes dr-ready {
+      from { background: rgba(255,215,0,0.05); }
+      to   { background: rgba(255,215,0,0.12); }
+    }
+  }
+  &--waiting { opacity: 0.7; }
+  &:active    { background: rgba(255,255,255,0.04); }
+
+  // ── Icon ─────────────────────────────────────────────────────────────────
+  &__icon {
+    width: 72px;
+    flex-shrink: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 5px;
+    padding: 12px 0;
+    border-right: 1px solid rgba(255,255,255,0.06);
+    position: relative;
+  }
+
+  &__emoji {
+    font-size: 34px;
+    line-height: 1;
+  }
+
+  &__qty {
+    font-size: 12px;
+    font-weight: 900;
+    color: rgba(255,255,255,0.7);
+    background: rgba(255,255,255,0.1);
+    border-radius: 7px;
+    padding: 1px 7px;
+    min-width: 28px;
+    text-align: center;
+    .dr--ready & { background: rgba(255,215,0,0.2); color: @gold; }
+  }
+
+  &__star {
+    position: absolute;
+    top: 8px; right: 6px;
+    font-size: 14px;
+  }
+
+  // ── Center ───────────────────────────────────────────────────────────────
+  &__center {
+    flex: 1;
+    min-width: 0;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    gap: 6px;
+    padding: 10px 10px;
+  }
+
+  &__meta {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: 6px;
+  }
+
+  &__income {
+    font-size: 15px;
+    font-weight: 900;
+    color: #ffe066;
+    text-shadow: 0 0 8px rgba(255,224,102,0.35);
+    em {
+      font-style: normal;
+      font-size: 10px;
+      opacity: 0.6;
+      margin-left: 1px;
+    }
+  }
+
+  &__time {
+    font-size: 11px;
+    font-weight: 700;
+    color: rgba(255,255,255,0.3);
+    flex-shrink: 0;
+  }
+
+  &__name {
+    font-size: 13px;
+    font-weight: 700;
+    color: rgba(255,255,255,0.5);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  &__locked-hint {
+    font-size: 11px;
+    color: rgba(255,255,255,0.25);
+  }
+
+  // Progress bar
+  &__bar-track {
+    height: 20px;
+    background: rgba(255,255,255,0.07);
+    border-radius: 6px;
+    overflow: hidden;
+    position: relative;
+    box-shadow: inset 0 1px 3px rgba(0,0,0,0.4);
+  }
+
+  &__bar-fill {
+    height: 100%;
+    border-radius: 6px;
+    transition: width 0.1s linear;
+    position: relative;
+    overflow: hidden;
+    &::after {
+      content: '';
+      position: absolute;
+      top: 0; bottom: 0; left: -40%;
+      width: 40%;
+      background: linear-gradient(90deg, transparent, rgba(255,255,255,0.28), transparent);
+      animation: dr-shimmer 1.8s linear infinite;
+      @keyframes dr-shimmer { to { left: 130%; } }
+    }
+  }
+
+  &__bar-empty {
+    height: 8px;
+    background: rgba(255,255,255,0.05);
+    border-radius: 4px;
+  }
+
+  &__bar-label {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 11px;
+    font-weight: 900;
+    color: rgba(0,0,0,0.7);
+    letter-spacing: 0.5px;
+    &--dim { color: rgba(0,0,0,0.55); font-weight: 800; }
+  }
+
+  // Hire staff
+  &__hire {
+    font-size: 11px;
+    font-weight: 700;
+    color: rgba(255,215,0,0.45);
+    cursor: pointer;
+    touch-action: none;
+    &:active { color: @gold; }
+  }
+
+  // ── Buy button ────────────────────────────────────────────────────────────
+  &__buy {
+    width: 76px;
+    flex-shrink: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 3px;
+    border: none;
+    border-left: 1px solid rgba(255,255,255,0.06);
+    background: rgba(255,255,255,0.04);
+    color: rgba(255,255,255,0.18);
+    cursor: pointer;
+    touch-action: none;
+    -webkit-tap-highlight-color: transparent;
+    transition: transform 0.08s;
+    position: relative;
+    overflow: hidden;
+
+    &--on {
+      background: linear-gradient(160deg, rgba(248,164,200,0.28), rgba(220,100,160,0.22));
+      border-left-color: rgba(248,164,200,0.3);
+      color: white;
+      box-shadow: inset 2px 0 0 rgba(255,255,255,0.1);
+
+      &::after {
+        content: '';
+        position: absolute;
+        top: 0; left: 0; right: 0;
+        height: 40%;
+        background: rgba(255,255,255,0.1);
+        border-radius: 0 0 50% 50%;
+        pointer-events: none;
+      }
+    }
+
+    &:active { transform: scale(0.93); }
+  }
+
+  &__buy-qty {
+    font-size: 20px;
+    font-weight: 900;
+    line-height: 1;
+    position: relative;
+  }
+
+  &__buy-price {
+    font-size: 10px;
+    font-weight: 800;
+    opacity: 0.9;
+    position: relative;
+    text-align: center;
+    padding: 0 4px;
+    white-space: nowrap;
+    overflow: hidden;
+    max-width: 72px;
+    text-overflow: ellipsis;
+  }
+}

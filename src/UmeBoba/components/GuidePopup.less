@@ -1,0 +1,100 @@
+@pink: #f8a4c8;
+
+.gp {
+  position: absolute;
+  inset: 0;
+  z-index: 400;
+  display: flex;
+  align-items: flex-end;
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 0.25s;
+
+  &--in {
+    opacity: 1;
+    pointer-events: auto;
+  }
+
+  // ── Panel ─────────────────────────────────────────────────────────────────
+  &__panel {
+    width: 100%;
+    display: flex;
+    align-items: flex-end;
+    gap: 0;
+    padding: 0 12px 16px;
+    transform: translateY(20px);
+    transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+
+    .gp--in & {
+      transform: translateY(0);
+    }
+  }
+
+  // ── Character sprite ──────────────────────────────────────────────────────
+  &__sprite {
+    width: 120px;
+    height: 160px;
+    object-fit: contain;
+    object-position: bottom;
+    flex-shrink: 0;
+    pointer-events: none;
+    filter: drop-shadow(0 4px 12px rgba(0,0,0,0.5));
+  }
+
+  // ── Speech bubble ─────────────────────────────────────────────────────────
+  &__bubble {
+    flex: 1;
+    background: rgba(10, 0, 25, 0.92);
+    border: 1.5px solid rgba(248, 164, 200, 0.4);
+    border-radius: 16px;
+    padding: 14px 16px 12px;
+    margin-left: -8px;
+    margin-bottom: 12px;
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    position: relative;
+    backdrop-filter: blur(12px);
+    box-shadow: 0 8px 32px rgba(0,0,0,0.5);
+
+    // Tail pointing left toward character
+    &::before {
+      content: '';
+      position: absolute;
+      left: -10px;
+      bottom: 20px;
+      width: 0;
+      height: 0;
+      border-top: 6px solid transparent;
+      border-bottom: 6px solid transparent;
+      border-right: 10px solid rgba(248, 164, 200, 0.4);
+    }
+
+    &::after {
+      content: '';
+      position: absolute;
+      left: -8px;
+      bottom: 21px;
+      width: 0;
+      height: 0;
+      border-top: 5px solid transparent;
+      border-bottom: 5px solid transparent;
+      border-right: 9px solid rgba(10, 0, 25, 0.92);
+    }
+  }
+
+  &__line {
+    font-size: 13px;
+    font-weight: 600;
+    color: white;
+    line-height: 1.6;
+    display: block;
+  }
+
+  &__tap-hint {
+    font-size: 10px;
+    color: rgba(248, 164, 200, 0.6);
+    margin-top: 6px;
+    align-self: flex-end;
+  }
+}

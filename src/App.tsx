@@ -1,12 +1,7 @@
-import { WhackAMole } from './WhackAMole';
-import './App.less';
+import React from 'react'
+import UmeBoba from './UmeBoba'
+import './App.less'
 
-function App() {
-  return (
-    <div className="app">
-      <WhackAMole />
-    </div>
-  );
+export default function App() {
+  return <UmeBoba />
 }
-
-export default App;

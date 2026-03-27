@@ -1,0 +1,176 @@
+@gold: #ffd700;
+@pink: #FF1493;
+@pink-light: #ffb3d4;
+
+.sv {
+  position: relative;
+  width: 100%;
+
+  // ── Stage ─────────────────────────────────────────────────────────────────
+  &__stage {
+    position: relative;
+    width: 100%;
+    background: rgba(6, 0, 18, 0.95);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 16px 0 0;
+    border-bottom: 3px solid #d4a870;
+  }
+
+  // ── Cup wrapper: 75% width, square, overflow visible for float headroom ───
+  &__cup-wrap {
+    position: relative;
+    width: 55%;
+    aspect-ratio: 1 / 1;
+    overflow: visible;
+  }
+
+  &__img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    pointer-events: none;
+    filter: drop-shadow(0 12px 28px rgba(0,0,0,0.5));
+    position: relative;
+    z-index: 1;
+    animation: sv-float-idle 3s ease-in-out infinite alternate;
+    @keyframes sv-float-idle {
+      from { transform: translateY(0); }
+      to   { transform: translateY(-12px); }
+    }
+  }
+
+  // Glow at base of cup
+  &__glow {
+    position: absolute;
+    bottom: 2%;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 60%;
+    height: 14%;
+    background: radial-gradient(ellipse,
+      rgba(255, 20, 147, calc(var(--glow, 0) * 0.55)) 0%,
+      rgba(255, 179, 212, calc(var(--glow, 0) * 0.3)) 55%,
+      transparent 80%
+    );
+    pointer-events: none;
+    z-index: 0;
+    animation: sv-glow-pulse 2s ease-in-out infinite alternate;
+    @keyframes sv-glow-pulse {
+      from { opacity: 0.6; transform: translateX(-50%) scaleX(0.9); }
+      to   { opacity: 1;   transform: translateX(-50%) scaleX(1.1); }
+    }
+  }
+
+  // ── Info: normal-flow block below cup ─────────────────────────────────────
+  &__info {
+    width: 100%;
+    padding: 10px 16px 14px;
+    margin-top: 8px;
+    border-top: 1px solid rgba(255,255,255,0.1);
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+  }
+
+  &__info-top {
+    display: flex;
+    align-items: center;
+    gap: 7px;
+  }
+
+  &__level-badge {
+    display: inline-block;
+    background: linear-gradient(135deg, rgba(@gold, 0.25), rgba(@gold, 0.1));
+    border: 1px solid rgba(@gold, 0.5);
+    border-radius: 6px;
+    color: @gold;
+    font-size: 10px;
+    font-weight: 800;
+    padding: 2px 7px;
+    letter-spacing: 0.5px;
+    flex-shrink: 0;
+  }
+
+  &__name {
+    font-size: 15px;
+    font-weight: 900;
+    color: white;
+    letter-spacing: 0.3px;
+    flex: 1;
+    text-shadow: 0 1px 6px rgba(0,0,0,0.8);
+  }
+
+  &__mult {
+    font-size: 11px;
+    color: #ffe066;
+    font-weight: 700;
+    text-shadow: 0 0 8px rgba(255,224,102,0.4);
+    flex-shrink: 0;
+  }
+
+  &__maxed {
+    font-size: 12px;
+    color: @gold;
+    font-weight: 700;
+  }
+
+  // ── Next level progress ────────────────────────────────────────────────────
+  &__next {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+  }
+
+  &__next-label {
+    display: flex;
+    justify-content: space-between;
+    font-size: 10px;
+    color: rgba(255,255,255,0.5);
+  }
+
+  &__next-cost {
+    color: @gold;
+    opacity: 0.8;
+  }
+
+  &__progress-track {
+    height: 4px;
+    background: rgba(255,255,255,0.1);
+    border-radius: 3px;
+    overflow: hidden;
+  }
+
+  &__progress-fill {
+    height: 100%;
+    background: linear-gradient(90deg, #ffb3d4, #FF1493);
+    border-radius: 3px;
+    transition: width 0.5s ease;
+  }
+
+  // ── Particles ─────────────────────────────────────────────────────────────
+  &__particles {
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    overflow: hidden;
+    z-index: 2;
+  }
+
+  &__particle {
+    position: absolute;
+    bottom: 25%;
+    line-height: 1;
+    animation: sv-float linear forwards;
+    opacity: 0;
+
+    @keyframes sv-float {
+      0%   { transform: translateY(0);      opacity: 0; }
+      10%  { opacity: 1; }
+      80%  { opacity: 0.9; }
+      100% { transform: translateY(-220px); opacity: 0; }
+    }
+  }
+
+}
