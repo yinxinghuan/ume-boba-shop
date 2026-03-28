@@ -15,8 +15,10 @@
     radial-gradient(circle at 100% 50%, transparent @notch-r,   black @notch-rp),
     radial-gradient(circle at 50%  0%,  transparent @scallop-r, black @scallop-rp),
     radial-gradient(circle at 50% 100%, transparent @scallop-r, black @scallop-rp);
-  -webkit-mask-size:     100% 100%, 100% 100%, @scallop-s @scallop-s, @scallop-s @scallop-s;
-  -webkit-mask-position: 0 0, 0 0, 0 0, 0 100%;
+  // scallop tiles must be full-height (100%) so the middle of the element
+  // stays visible under mask-composite:intersect
+  -webkit-mask-size:     100% 100%, 100% 100%, @scallop-s 100%, @scallop-s 100%;
+  -webkit-mask-position: 0 0, 0 0, 0 0, 0 0;
   -webkit-mask-repeat:   no-repeat, no-repeat, repeat-x, repeat-x;
   -webkit-mask-composite: destination-in, destination-in, destination-in;
 
@@ -25,8 +27,8 @@
     radial-gradient(circle at 100% 50%, transparent @notch-r,   black @notch-rp),
     radial-gradient(circle at 50%  0%,  transparent @scallop-r, black @scallop-rp),
     radial-gradient(circle at 50% 100%, transparent @scallop-r, black @scallop-rp);
-  mask-size:     100% 100%, 100% 100%, @scallop-s @scallop-s, @scallop-s @scallop-s;
-  mask-position: 0 0, 0 0, 0 0, 0 100%;
+  mask-size:     100% 100%, 100% 100%, @scallop-s 100%, @scallop-s 100%;
+  mask-position: 0 0, 0 0, 0 0, 0 0;
   mask-repeat:   no-repeat, no-repeat, repeat-x, repeat-x;
   mask-composite: intersect, intersect, intersect;
 }
