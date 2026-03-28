@@ -15,6 +15,7 @@ import Leaderboard from './components/Leaderboard'
 import ShopView from './components/ShopView'
 import HelpPanel from './components/HelpPanel'
 import { DRINKS, fmt, fmtUSD, incomePerCycle, cycleMs, getShopLevel, prestigeGain, prestigeMultiplier, PRESTIGE_THRESHOLD } from './constants'
+import { t, localeName } from './i18n'
 import { playUnlock, isMuted, setMuted } from './utils/sounds'
 import type { GameSave } from './types'
 import imgBgShop from './img/bg_shop.png'
@@ -231,12 +232,12 @@ export default function UmeBoba() {
         <div className="ub__hud-money">
           {(save.prestige ?? 0) > 0 && (
             <div className="ub__prestige-badge">
-              🌙 {save.prestige} 结晶 · ×{pMult.toFixed(1)}
+              🌙 {save.prestige} {t('crystals')} · ×{pMult.toFixed(1)}
             </div>
           )}
           <div className="ub__coins">{fmtUSD(save.coins)}</div>
           {perSec >= 0.1 && (
-            <div className="ub__per-sec">+{fmtUSD(perSec)}/秒</div>
+            <div className="ub__per-sec">+{fmtUSD(perSec)}{t('per_sec')}</div>
           )}
         </div>
         <div className="ub__hud-right">
@@ -268,7 +269,7 @@ export default function UmeBoba() {
               className={`ub__buy-mode-btn ${buyMode === m ? 'ub__buy-mode-btn--active' : ''}`}
               onPointerDown={() => setBuyMode(m)}
             >
-              {m === 'max' ? '最多' : `×${m}`}
+              {m === 'max' ? t('max') : `×${m}`}
             </button>
           ))}
         </div>
@@ -293,10 +294,10 @@ export default function UmeBoba() {
 
         {nextDrink && (
           <div className="ub__locked-row">
-            <img src={DRINK_IMGS[nextDrink.id]} alt={nextDrink.nameZh} draggable={false} className="ub__locked-img" />
+            <img src={DRINK_IMGS[nextDrink.id]} alt={localeName(nextDrink)} draggable={false} className="ub__locked-img" />
             <div>
-              <div className="ub__locked-name">{nextDrink.nameZh}</div>
-              <div className="ub__locked-hint">店铺升级后解锁 · {fmtUSD(nextDrink.unlockCost)} 总收入</div>
+              <div className="ub__locked-name">{localeName(nextDrink)}</div>
+              <div className="ub__locked-hint">{t('locked_pre')}{fmtUSD(nextDrink.unlockCost)}{t('locked_post')}</div>
             </div>
             <div className="ub__locked-bar">
               <div className="ub__locked-fill" style={{ width: `${Math.min(save.totalEarned / nextDrink.unlockCost * 100, 100)}%` }} />
@@ -314,18 +315,18 @@ export default function UmeBoba() {
               <div className="ub__prestige-ticket__label">PRESTIGE</div>
             </div>
             <div className="ub__prestige-ticket__body">
-              <div className="ub__prestige-ticket__title">月球转生</div>
+              <div className="ub__prestige-ticket__title">{t('prestige_title')}</div>
               <div className="ub__prestige-ticket__gain">
-                获得 <strong>+{prestigeGain(save.totalEarned)}</strong> 🌙 结晶
+                {t('prestige_earn')} <strong>+{prestigeGain(save.totalEarned)}</strong> 🌙 {t('crystals')}
               </div>
               <div className="ub__prestige-ticket__current">
-                当前 {save.prestige ?? 0} 🌙 · 转生后 ×{prestigeMultiplier((save.prestige ?? 0) + prestigeGain(save.totalEarned)).toFixed(1)} 全局收益
+                {t('prestige_now')} {save.prestige ?? 0} 🌙 · {t('prestige_after_x')}{prestigeMultiplier((save.prestige ?? 0) + prestigeGain(save.totalEarned)).toFixed(1)}{t('prestige_global')}
               </div>
             </div>
             <div className="ub__prestige-ticket__tear" />
             <div className="ub__prestige-ticket__cta">
-              <span>立即</span>
-              <span>转生</span>
+              <span>{t('prestige_cta1')}</span>
+              <span>{t('prestige_cta2')}</span>
             </div>
           </div>
         )}
@@ -358,7 +359,7 @@ export default function UmeBoba() {
       {/* ── Leaderboard modal ────────────────────────────────────────── */}
       {showLb && (
         <Leaderboard
-          gameName="UMe 珍珠奶茶小铺"
+          gameName={t('game_name')}
           isInAigram={isInAigram}
           onClose={() => setShowLb(false)}
           fetchGlobal={fetchGlobalLeaderboard}
@@ -374,18 +375,18 @@ export default function UmeBoba() {
         <div className="ub__overlay" onPointerDown={() => setShowPrestige(false)}>
           <div className="ub__modal" onPointerDown={e => e.stopPropagation()}>
             <div className="ub__modal-icon">🌙</div>
-            <div className="ub__modal-title">月球转生</div>
+            <div className="ub__modal-title">{t('prestige_title')}</div>
             <div className="ub__modal-body">
-              重置所有饮品和金币<br />
-              获得 <span className="ub__modal-coins">+{prestigeGain(save.totalEarned)} 🌙 结晶</span>
+              {t('prestige_reset_body')}<br />
+              {t('prestige_earn')} <span className="ub__modal-coins">+{prestigeGain(save.totalEarned)} 🌙 {t('crystals')}</span>
             </div>
             <div className="ub__modal-body" style={{ fontSize: 13, opacity: 0.7 }}>
-              当前结晶：{save.prestige ?? 0} 🌙<br />
-              转生后结晶：{(save.prestige ?? 0) + prestigeGain(save.totalEarned)} 🌙<br />
-              全局收益倍率：×{prestigeMultiplier((save.prestige ?? 0) + prestigeGain(save.totalEarned)).toFixed(1)}
+              {t('prestige_current_label')}{save.prestige ?? 0} 🌙<br />
+              {t('prestige_after_label')}{(save.prestige ?? 0) + prestigeGain(save.totalEarned)} 🌙<br />
+              {t('global_mult_label')}{prestigeMultiplier((save.prestige ?? 0) + prestigeGain(save.totalEarned)).toFixed(1)}
             </div>
-            <button className="ub__modal-btn" onPointerDown={doPrestige}>确认转生</button>
-            <button className="ub__modal-btn" style={{ background: 'rgba(255,255,255,0.1)', boxShadow: 'none', marginTop: 0 }} onPointerDown={() => setShowPrestige(false)}>取消</button>
+            <button className="ub__modal-btn" onPointerDown={doPrestige}>{t('prestige_confirm')}</button>
+            <button className="ub__modal-btn" style={{ background: 'rgba(255,255,255,0.1)', boxShadow: 'none', marginTop: 0 }} onPointerDown={() => setShowPrestige(false)}>{t('cancel')}</button>
           </div>
         </div>
       )}
@@ -395,12 +396,12 @@ export default function UmeBoba() {
         <div className="ub__overlay">
           <div className="ub__modal">
             <div className="ub__modal-icon">🌙</div>
-            <div className="ub__modal-title">离线收益</div>
+            <div className="ub__modal-title">{t('offline_title')}</div>
             <div className="ub__modal-body">
-              离开期间店员帮你赚了<br />
+              {t('offline_body')}<br />
               <span className="ub__modal-coins">+{fmtUSD(offlineCoins)}</span>
             </div>
-            <button className="ub__modal-btn" onPointerDown={collectOffline}>收下！</button>
+            <button className="ub__modal-btn" onPointerDown={collectOffline}>{t('offline_collect')}</button>
           </div>
         </div>
       )}

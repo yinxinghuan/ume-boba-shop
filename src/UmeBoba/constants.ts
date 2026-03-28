@@ -1,13 +1,14 @@
 import type { DrinkDef, ShopLevel } from './types'
+import { t } from './i18n'
 
 // ── Shop levels ────────────────────────────────────────────────────────────────
 export const SHOP_LEVELS: ShopLevel[] = [
-  { level: 1, nameZh: '路边小摊',       threshold: 0,           multiplier: 1,    unlockDrinkId: 'pearl_milk_tea' },
-  { level: 2, nameZh: '小奶茶铺',       threshold: 5_000,       multiplier: 1.5,  unlockDrinkId: 'watermelon'     },
-  { level: 3, nameZh: '城市旗舰店',     threshold: 40_000,      multiplier: 2,    unlockDrinkId: 'mango'          },
-  { level: 4, nameZh: '跨国连锁集团',   threshold: 250_000,     multiplier: 3,    unlockDrinkId: 'lemon'          },
-  { level: 5, nameZh: '星际奶茶公司',   threshold: 1_500_000,   multiplier: 4,    unlockDrinkId: 'avocado'        },
-  { level: 6, nameZh: '月球旗舰站',     threshold: 10_000_000,  multiplier: 6,    unlockDrinkId: 'angel'          },
+  { level: 1, nameZh: '路边小摊',     nameEn: 'Street Stall',        threshold: 0,           multiplier: 1,    unlockDrinkId: 'pearl_milk_tea' },
+  { level: 2, nameZh: '小奶茶铺',     nameEn: 'Boba Kiosk',          threshold: 5_000,       multiplier: 1.5,  unlockDrinkId: 'watermelon'     },
+  { level: 3, nameZh: '城市旗舰店',   nameEn: 'City Flagship',       threshold: 40_000,      multiplier: 2,    unlockDrinkId: 'mango'          },
+  { level: 4, nameZh: '跨国连锁集团', nameEn: 'Global Chain',        threshold: 250_000,     multiplier: 3,    unlockDrinkId: 'lemon'          },
+  { level: 5, nameZh: '星际奶茶公司', nameEn: 'Galactic Boba Corp',  threshold: 1_500_000,   multiplier: 4,    unlockDrinkId: 'avocado'        },
+  { level: 6, nameZh: '月球旗舰站',   nameEn: 'Lunar Flagship',      threshold: 10_000_000,  multiplier: 6,    unlockDrinkId: 'angel'          },
 ]
 
 export function getShopLevel(totalEarned: number): ShopLevel {
@@ -29,6 +30,7 @@ export const DRINKS: DrinkDef[] = [
     id: 'pearl_milk_tea',
     emoji: '🧋',
     nameZh: '珍珠奶茶',
+    nameEn: 'Pearl Milk Tea',
     color: '#f8a4c8',
     baseCycleMs: 3_000,
     baseIncome: 8,
@@ -42,6 +44,7 @@ export const DRINKS: DrinkDef[] = [
     id: 'watermelon',
     emoji: '🍉',
     nameZh: '西瓜特调',
+    nameEn: 'Watermelon Splash',
     color: '#ff6b6b',
     baseCycleMs: 8_000,
     baseIncome: 40,
@@ -55,6 +58,7 @@ export const DRINKS: DrinkDef[] = [
     id: 'mango',
     emoji: '🐥',
     nameZh: '芒果波霸',
+    nameEn: 'Mango Boba',
     color: '#ffd700',
     baseCycleMs: 20_000,
     baseIncome: 160,
@@ -68,6 +72,7 @@ export const DRINKS: DrinkDef[] = [
     id: 'lemon',
     emoji: '🍋',
     nameZh: '柠檬气泡',
+    nameEn: 'Lemon Fizz',
     color: '#c8ff6b',
     baseCycleMs: 60_000,
     baseIncome: 700,
@@ -81,6 +86,7 @@ export const DRINKS: DrinkDef[] = [
     id: 'avocado',
     emoji: '🥑',
     nameZh: '牛油果拿铁',
+    nameEn: 'Avocado Latte',
     color: '#7fff7f',
     baseCycleMs: 3 * 60_000,
     baseIncome: 3_500,
@@ -94,6 +100,7 @@ export const DRINKS: DrinkDef[] = [
     id: 'angel',
     emoji: '😇',
     nameZh: '珍珠天使特调',
+    nameEn: 'Angel Pearl Special',
     color: '#c8b4ff',
     baseCycleMs: 15 * 60_000,
     baseIncome: 20_000,
@@ -184,7 +191,7 @@ export function fmtUSD(n: number): string {
 
 /** Format cycle duration */
 export function fmtMs(ms: number): string {
-  if (ms >= 60_000) return (ms / 60_000).toFixed(1) + '分'
-  if (ms >= 1_000)  return (ms / 1_000).toFixed(1) + '秒'
+  if (ms >= 60_000) return (ms / 60_000).toFixed(1) + t('min')
+  if (ms >= 1_000)  return (ms / 1_000).toFixed(1) + t('sec')
   return ms + 'ms'
 }

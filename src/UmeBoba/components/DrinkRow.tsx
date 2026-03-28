@@ -1,7 +1,7 @@
 import React, { useState } from 'react'
 import type { DrinkDef, DrinkProgress } from '../types'
 import { buyCost, maxBuyQty, cycleMs, fmtUSD, fmtMs, incomePerCycle } from '../constants'
-import { t } from '../i18n'
+import { t, localeName } from '../i18n'
 import './DrinkRow.less'
 
 import imgPearl      from '../img/drink_pearl_milk_tea.png'
@@ -111,7 +111,7 @@ export default function DrinkRow({
     >
       {/* ── Icon ── */}
       <div className="dr__icon">
-        <img src={DRINK_IMGS[def.id]} alt={def.nameZh} draggable={false} className="dr__img" />
+        <img src={DRINK_IMGS[def.id]} alt={localeName(def)} draggable={false} className="dr__img" />
         {dp.qty > 0 && (
           <div className="dr__qty-wrap">
             <div key={dp.qty} className="dr__qty">{dp.qty}</div>
@@ -124,17 +124,17 @@ export default function DrinkRow({
       <div className="dr__center">
         <div className="dr__meta">
           {dp.qty > 0
-            ? <span className="dr__income">{fmtUSD(income / ms * 1000)}<em>/秒</em></span>
-            : <span className="dr__name">{def.nameZh}</span>
+            ? <span className="dr__income">{fmtUSD(income / ms * 1000)}<em>{t('per_sec')}</em></span>
+            : <span className="dr__name">{localeName(def)}</span>
           }
-          {dp.qty > 0 && <span className="dr__name dr__name--meta">{def.nameZh}</span>}
+          {dp.qty > 0 && <span className="dr__name dr__name--meta">{localeName(def)}</span>}
           {dp.qty > 0 && <span className="dr__time">{fmtMs(ms)}</span>}
         </div>
         {dp.qty > 0 ? (
           <div className="dr__bar-track">
             <div className="dr__bar-fill" style={{ width: `${progress * 100}%`, background: def.color }} />
-            {ready   && <span className="dr__bar-label">收取！</span>}
-            {waiting && <span className="dr__bar-label dr__bar-label--dim">点击开始</span>}
+            {ready   && <span className="dr__bar-label">{t('collect')}</span>}
+            {waiting && <span className="dr__bar-label dr__bar-label--dim">{t('tap_to_start')}</span>}
           </div>
         ) : (
           <div className="dr__bar-empty" />

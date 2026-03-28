@@ -1,5 +1,6 @@
 import React, { useEffect, useMemo, useRef, useState } from 'react'
 import { getShopLevel, getNextShopLevel, fmt, fmtUSD } from '../constants'
+import { t, localeName } from '../i18n'
 import './ShopView.less'
 
 interface Particle {
@@ -76,7 +77,7 @@ export default function ShopView({ totalEarned, perSec, currentImage }: Props) {
 
         {/* Cup image — square, centered */}
         <div className="sv__cup-wrap">
-          <img src={currentImage} alt={shopLevel.nameZh} draggable={false} className="sv__img" />
+          <img src={currentImage} alt={localeName(shopLevel)} draggable={false} className="sv__img" />
           <div className="sv__glow" />
         </div>
 
@@ -101,14 +102,14 @@ export default function ShopView({ totalEarned, perSec, currentImage }: Props) {
         <div className="sv__info">
           <div className="sv__info-top">
             <div className="sv__level-badge">Lv.{shopLevel.level}</div>
-            <div className="sv__name">{shopLevel.nameZh}</div>
+            <div className="sv__name">{localeName(shopLevel)}</div>
             <div className="sv__mult">×{shopLevel.multiplier}</div>
           </div>
 
           {nextLevel && (
             <div className="sv__next">
               <div className="sv__next-label">
-                <span>→ {nextLevel.nameZh}</span>
+                <span>→ {localeName(nextLevel)}</span>
                 <span className="sv__next-cost">{fmtUSD(nextLevel.threshold)}</span>
               </div>
               <div className="sv__progress-track">
@@ -118,7 +119,7 @@ export default function ShopView({ totalEarned, perSec, currentImage }: Props) {
           )}
 
           {!nextLevel && (
-            <div className="sv__maxed">🏆 已达到最高等级！</div>
+            <div className="sv__maxed">{t('maxed_level')}</div>
           )}
         </div>
 

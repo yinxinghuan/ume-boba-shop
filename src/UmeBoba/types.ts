@@ -1,6 +1,7 @@
 export interface ShopLevel {
   level: number
   nameZh: string
+  nameEn: string
   threshold: number     // totalEarned required
   multiplier: number    // global income multiplier at this level
   unlockDrinkId: string
@@ -10,6 +11,7 @@ export interface DrinkDef {
   id: string
   emoji: string
   nameZh: string
+  nameEn: string
   color: string          // accent color for this drink's bar
   baseCycleMs: number    // cycle duration at qty=1
   baseIncome: number     // coins per cycle at qty=1
@@ -24,6 +26,12 @@ export interface DrinkProgress {
   qty: number
   cycleStarted: number    // Date.now() when current cycle began; 0 = waiting for tap to start
   hasManager: boolean
+}
+
+export interface GuideLine {
+  char: string
+  expr: string
+  lines: { zh: string[]; en: string[] }
 }
 
 export interface GameSave {

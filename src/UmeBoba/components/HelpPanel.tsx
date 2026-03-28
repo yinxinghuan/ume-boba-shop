@@ -3,6 +3,7 @@ import imgShop      from '../img/shops/level6.png'
 import imgYoome     from '../img/guides/yoome_happy.png'
 import imgBubble    from '../img/guides/bubblepearl_happy.png'
 import imgDrink     from '../img/drink_pearl_milk_tea.png'
+import { t } from '../i18n'
 import './HelpPanel.less'
 
 interface Props { onClose: () => void }
@@ -14,52 +15,41 @@ export default function HelpPanel({ onClose }: Props) {
 
         {/* ── Header ── */}
         <div className="ub-hp__header">
-          <span className="ub-hp__title">玩法说明</span>
+          <span className="ub-hp__title">{t('help_title')}</span>
           <button className="ub-hp__close" onPointerDown={onClose}>✕</button>
         </div>
 
-        {/* ── 收益倍率 ── */}
-        <div className="ub-hp__section-label">收益倍率</div>
+        {/* ── Income multiplier ── */}
+        <div className="ub-hp__section-label">{t('help_multiplier_label')}</div>
         <HelpRow
           img={imgDrink} imgSize={56} accent="#ffd700"
-          title="杯数越多，收益越高"
-          lines={[
-            '每多一杯，每轮收益线性增加',
-            '10 / 25 / 50 / 100 杯时收益大幅跳升',
-            '店铺等级提升后，全局收益倍率同步上涨',
-          ]}
+          title={t('help_multiplier_title')}
+          lines={[t('help_multiplier_l1'), t('help_multiplier_l2'), t('help_multiplier_l3')]}
         />
 
-        {/* ── 店员 ── */}
-        <div className="ub-hp__section-label">自动化</div>
+        {/* ── Automation ── */}
+        <div className="ub-hp__section-label">{t('help_auto_label')}</div>
         <HelpRow
           img={imgYoome} imgSize={72} accent="#c084fc"
-          title="雇用店员，自动收益"
-          lines={[
-            '雇用后进度满自动收取，无需手动点击',
-            '关掉游戏也能积累离线收益',
-          ]}
+          title={t('help_auto_title')}
+          lines={[t('help_auto_l1'), t('help_auto_l2')]}
         />
 
-        {/* ── 转生结晶 ── */}
-        <div className="ub-hp__section-label">月球转生 🌙</div>
+        {/* ── Prestige ── */}
+        <div className="ub-hp__section-label">{t('help_prestige_label')}</div>
         <HelpRow
           img={imgShop} imgSize={64} accent="#d4aaff"
-          title="重置换结晶，永久提升倍率"
-          lines={[
-            '总收入达到 $1B 后可进行转生',
-            '转生获得🌙结晶，结晶越多全局倍率越高',
-            '排行榜以结晶数量排名',
-          ]}
+          title={t('help_prestige_title')}
+          lines={[t('help_prestige_l1'), t('help_prestige_l2'), t('help_prestige_l3')]}
         />
 
         {/* ── Tip ── */}
         <div className="ub-hp__tip">
           <img src={imgBubble} alt="" draggable={false} className="ub-hp__tip-char" />
-          <span>💡 招满所有店员 → 攒到 $1B → 转生！每次都比上次快！</span>
+          <span>{t('help_tip')}</span>
         </div>
 
-        <button className="ub-hp__btn" onPointerDown={onClose}>知道了！</button>
+        <button className="ub-hp__btn" onPointerDown={onClose}>{t('help_ok')}</button>
       </div>
     </div>
   )

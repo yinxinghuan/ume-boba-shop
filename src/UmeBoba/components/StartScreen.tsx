@@ -3,6 +3,7 @@ import imgCup from '../img/shops/level1.png'
 import { fmt } from '../constants'
 import Leaderboard from './Leaderboard'
 import type { LeaderboardEntry } from '../hooks/useGameScore'
+import { t } from '../i18n'
 import './StartScreen.less'
 
 interface Props {
@@ -50,7 +51,7 @@ export default function StartScreen({ playerName, playerAvatar, bestScore, hasSa
           <div className="ss__greeting">
             {playerAvatar && <img src={playerAvatar} alt="" draggable={false} className="ss__avatar" />}
             <span>{playerName}</span>
-            {bestScore > 0 && <span className="ss__best">· 🌙 {bestScore} 结晶</span>}
+            {bestScore > 0 && <span className="ss__best">· 🌙 {bestScore} {t('crystals')}</span>}
           </div>
         )}
 
@@ -58,7 +59,7 @@ export default function StartScreen({ playerName, playerAvatar, bestScore, hasSa
         <div className="ss__ticket-wrap" onPointerDown={onPlay}>
           <div className="ss__ticket">
             <span className="ss__ticket-label">
-              {bestScore > 0 ? '继续营业' : '开始营业'}
+              {bestScore > 0 ? t('continue_business') : t('open_business')}
             </span>
             <span className="ss__ticket-sub">🧋 OPEN</span>
           </div>
@@ -67,7 +68,7 @@ export default function StartScreen({ playerName, playerAvatar, bestScore, hasSa
         {/* Reset button — only when there's a previous save */}
         {hasSave && (
           <button className="ss__reset-btn" onPointerDown={() => setShowReset(true)}>
-            重新开始
+            {t('restart')}
           </button>
         )}
 
@@ -78,11 +79,11 @@ export default function StartScreen({ playerName, playerAvatar, bestScore, hasSa
       {showReset && (
         <div className="ss__confirm-overlay" onPointerDown={() => setShowReset(false)}>
           <div className="ss__confirm" onPointerDown={e => e.stopPropagation()}>
-            <div className="ss__confirm-title">重新开始？</div>
-            <div className="ss__confirm-body">当前进度将会清空，无法恢复。</div>
+            <div className="ss__confirm-title">{t('reset_confirm_title')}</div>
+            <div className="ss__confirm-body">{t('reset_confirm_body')}</div>
             <div className="ss__confirm-btns">
-              <button className="ss__confirm-btn ss__confirm-btn--cancel" onPointerDown={() => setShowReset(false)}>取消</button>
-              <button className="ss__confirm-btn ss__confirm-btn--ok" onPointerDown={() => { onReset(); setShowReset(false) }}>确认重置</button>
+              <button className="ss__confirm-btn ss__confirm-btn--cancel" onPointerDown={() => setShowReset(false)}>{t('cancel')}</button>
+              <button className="ss__confirm-btn ss__confirm-btn--ok" onPointerDown={() => { onReset(); setShowReset(false) }}>{t('confirm_reset')}</button>
             </div>
           </div>
         </div>
@@ -90,7 +91,7 @@ export default function StartScreen({ playerName, playerAvatar, bestScore, hasSa
 
       {showLb && (
         <Leaderboard
-          gameName="Boba Rush"
+          gameName={t('game_name')}
           isInAigram={isInAigram}
           onClose={() => setShowLb(false)}
           fetchGlobal={fetchGlobal}

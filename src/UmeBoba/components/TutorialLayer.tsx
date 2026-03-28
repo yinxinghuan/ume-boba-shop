@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import type { TutorialStep } from '../tutorial'
-import type { GuideLine } from '../guideLines'
+import type { GuideLine } from '../types'
+import { t, tLines, locale } from '../i18n'
 import './TutorialLayer.less'
 
 const SPRITES: Record<string, string> = import.meta.glob(
@@ -46,7 +47,7 @@ export default function TutorialLayer({ step, onAdvance, onSkip, drinkRowRect, b
       {isDialog && <div className="tut__backdrop" onPointerDown={onAdvance} />}
 
       {/* Skip button always visible */}
-      <button className="tut__skip" onPointerDown={onSkip}>跳过引导</button>
+      <button className="tut__skip" onPointerDown={onSkip}>{t('skip_tutorial')}</button>
 
       {/* Spotlight + arrow for action steps */}
       {(isHighlight || isBuyHighlight) && targetRect && (
@@ -60,7 +61,7 @@ export default function TutorialLayer({ step, onAdvance, onSkip, drinkRowRect, b
               height: targetRect.height,
             }}
           />
-          <ArrowHint rect={targetRect} text={step.arrowText ?? '点这里！'} />
+          <ArrowHint rect={targetRect} text={step.arrowText ? step.arrowText[locale] : t('tap_here')} />
         </>
       )}
 
@@ -77,10 +78,10 @@ export default function TutorialLayer({ step, onAdvance, onSkip, drinkRowRect, b
             className="tut__sprite"
           />
           <div className="tut__bubble">
-            {displayedDialog.lines.map((line, i) => (
+            {tLines(displayedDialog.lines).map((line, i) => (
               <span key={i} className="tut__line">{line}</span>
             ))}
-            <span className="tut__tap-hint">点击继续 →</span>
+            <span className="tut__tap-hint">{t('tap_continue_arrow')}</span>
           </div>
         </div>
       )}

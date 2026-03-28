@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react'
-import type { GuideLine } from '../guideLines'
+import type { GuideLine } from '../types'
+import { t, tLines } from '../i18n'
 import './GuidePopup.less'
 
 // Eagerly import all 18 guide sprites
@@ -42,10 +43,10 @@ export default function GuidePopup({ guide, onClose }: Props) {
       <div className="gp__panel">
         <img src={src} alt={displayed.char} draggable={false} className="gp__sprite" />
         <div className="gp__bubble">
-          {displayed.lines.map((line, i) => (
+          {tLines(displayed.lines).map((line, i) => (
             <span key={i} className="gp__line">{line}</span>
           ))}
-          <span className="gp__tap-hint">点击继续</span>
+          <span className="gp__tap-hint">{t('tap_continue')}</span>
         </div>
       </div>
     </div>

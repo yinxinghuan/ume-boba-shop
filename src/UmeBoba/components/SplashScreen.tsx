@@ -77,7 +77,7 @@ const SplashScreen = React.memo(
         <img
           className={`ub-splash__img${posterReady ? ' ub-splash__img--visible' : ''}`}
           src={posterImg}
-          alt="UMe 珍珠奶茶小铺"
+          alt="Boba Rush"
           draggable={false}
           onLoad={() => setPosterReady(true)}
         />

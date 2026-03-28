@@ -1,10 +1,10 @@
 import { useCallback, useEffect, useRef, useState } from 'react'
 import {
-  GUIDE_LINES, GuideLine, GuideTrigger,
+  GUIDE_LINES, GuideTrigger,
   SESSION_ONLY_TRIGGERS, TIP_SEQUENCE,
   getQtyMilestoneLine,
 } from '../guideLines'
-import type { GameSave } from '../types'
+import type { GuideLine, GameSave } from '../types'
 import { DRINKS } from '../constants'
 
 const SEEN_KEY = 'ume-boba-guide-seen'
