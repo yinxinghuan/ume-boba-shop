@@ -2,12 +2,12 @@ import type { DrinkDef, ShopLevel } from './types'
 
 // ── Shop levels ────────────────────────────────────────────────────────────────
 export const SHOP_LEVELS: ShopLevel[] = [
-  { level: 1, nameZh: '路边小摊',       threshold: 0,         multiplier: 1,    unlockDrinkId: 'pearl_milk_tea' },
-  { level: 2, nameZh: '小奶茶铺',       threshold: 500,       multiplier: 1.5,  unlockDrinkId: 'watermelon'     },
-  { level: 3, nameZh: '城市旗舰店',     threshold: 5_000,     multiplier: 2,    unlockDrinkId: 'mango'          },
-  { level: 4, nameZh: '跨国连锁集团',   threshold: 30_000,    multiplier: 3,    unlockDrinkId: 'lemon'          },
-  { level: 5, nameZh: '星际奶茶公司',   threshold: 150_000,   multiplier: 5,    unlockDrinkId: 'avocado'        },
-  { level: 6, nameZh: '月球旗舰站',     threshold: 800_000,   multiplier: 10,   unlockDrinkId: 'angel'          },
+  { level: 1, nameZh: '路边小摊',       threshold: 0,           multiplier: 1,    unlockDrinkId: 'pearl_milk_tea' },
+  { level: 2, nameZh: '小奶茶铺',       threshold: 5_000,       multiplier: 1.5,  unlockDrinkId: 'watermelon'     },
+  { level: 3, nameZh: '城市旗舰店',     threshold: 40_000,      multiplier: 2,    unlockDrinkId: 'mango'          },
+  { level: 4, nameZh: '跨国连锁集团',   threshold: 250_000,     multiplier: 3,    unlockDrinkId: 'lemon'          },
+  { level: 5, nameZh: '星际奶茶公司',   threshold: 1_500_000,   multiplier: 5,    unlockDrinkId: 'avocado'        },
+  { level: 6, nameZh: '月球旗舰站',     threshold: 10_000_000,  multiplier: 10,   unlockDrinkId: 'angel'          },
 ]
 
 export function getShopLevel(totalEarned: number): ShopLevel {
@@ -31,12 +31,12 @@ export const DRINKS: DrinkDef[] = [
     nameZh: '珍珠奶茶',
     color: '#f8a4c8',
     baseCycleMs: 3_000,
-    baseIncome: 10,
-    buyCostBase: 4,
-    buyCostMult: 1.15,
-    managerCost: 500,
+    baseIncome: 8,
+    buyCostBase: 12,
+    buyCostMult: 1.18,
+    managerCost: 12_000,
     unlockCost: 0,
-    milestones: [10, 25, 50, 100, 200],
+    milestones: [10, 25, 50, 100],
   },
   {
     id: 'watermelon',
@@ -44,11 +44,11 @@ export const DRINKS: DrinkDef[] = [
     nameZh: '西瓜特调',
     color: '#ff6b6b',
     baseCycleMs: 8_000,
-    baseIncome: 35,
-    buyCostBase: 60,
-    buyCostMult: 1.14,
-    managerCost: 2_000,
-    unlockCost: 500,
+    baseIncome: 40,
+    buyCostBase: 200,
+    buyCostMult: 1.16,
+    managerCost: 60_000,
+    unlockCost: 5_000,
     milestones: [10, 25, 50, 100],
   },
   {
@@ -57,11 +57,11 @@ export const DRINKS: DrinkDef[] = [
     nameZh: '芒果波霸',
     color: '#ffd700',
     baseCycleMs: 20_000,
-    baseIncome: 130,
-    buyCostBase: 720,
-    buyCostMult: 1.13,
-    managerCost: 8_000,
-    unlockCost: 5_000,
+    baseIncome: 160,
+    buyCostBase: 3_000,
+    buyCostMult: 1.15,
+    managerCost: 300_000,
+    unlockCost: 40_000,
     milestones: [10, 25, 50, 100],
   },
   {
@@ -70,11 +70,11 @@ export const DRINKS: DrinkDef[] = [
     nameZh: '柠檬气泡',
     color: '#c8ff6b',
     baseCycleMs: 60_000,
-    baseIncome: 450,
-    buyCostBase: 8_640,
-    buyCostMult: 1.13,
-    managerCost: 30_000,
-    unlockCost: 30_000,
+    baseIncome: 700,
+    buyCostBase: 40_000,
+    buyCostMult: 1.14,
+    managerCost: 1_500_000,
+    unlockCost: 250_000,
     milestones: [10, 25, 50, 100],
   },
   {
@@ -83,11 +83,11 @@ export const DRINKS: DrinkDef[] = [
     nameZh: '牛油果拿铁',
     color: '#7fff7f',
     baseCycleMs: 3 * 60_000,
-    baseIncome: 1_800,
-    buyCostBase: 103_680,
-    buyCostMult: 1.12,
-    managerCost: 120_000,
-    unlockCost: 150_000,
+    baseIncome: 3_500,
+    buyCostBase: 500_000,
+    buyCostMult: 1.13,
+    managerCost: 7_000_000,
+    unlockCost: 1_500_000,
     milestones: [10, 25, 50, 100],
   },
   {
@@ -96,11 +96,11 @@ export const DRINKS: DrinkDef[] = [
     nameZh: '珍珠天使特调',
     color: '#c8b4ff',
     baseCycleMs: 15 * 60_000,
-    baseIncome: 9_000,
-    buyCostBase: 1_244_160,
+    baseIncome: 20_000,
+    buyCostBase: 6_000_000,
     buyCostMult: 1.12,
-    managerCost: 600_000,
-    unlockCost: 800_000,
+    managerCost: 35_000_000,
+    unlockCost: 10_000_000,
     milestones: [10, 25, 50, 100],
   },
 ]
@@ -130,11 +130,11 @@ export function maxBuyQty(def: DrinkDef, owned: number, budget: number): number 
   return qty
 }
 
-/** Actual cycle ms accounting for milestones (each milestone halves time, min 100ms) */
+/** Actual cycle ms accounting for milestones (each milestone cuts 35%, min 200ms) */
 export function cycleMs(def: DrinkDef, qty: number): number {
   let ms = def.baseCycleMs
   for (const m of def.milestones) {
-    if (qty >= m) ms = Math.max(100, ms / 2)
+    if (qty >= m) ms = Math.max(200, ms * 0.65)
   }
   return ms
 }
