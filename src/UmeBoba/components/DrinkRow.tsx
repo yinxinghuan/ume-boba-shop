@@ -98,20 +98,7 @@ export default function DrinkRow({ def, dp, progress, canAffordBuy, onTap, onBuy
 
       {/* ── Tickets column (right) ── */}
       <div className="dr__tickets">
-        {/* Buy ticket (horizontal) */}
-        <button
-          ref={buyRef}
-          className={`dr__buy ${canAffordBuy ? 'dr__buy--on' : ''}`}
-          onPointerDown={e => { e.stopPropagation(); onBuy() }}
-        >
-          <div className="dr__buy-inner">
-            <span className="dr__buy-arrow">↑</span>
-            <div className="dr__buy-tear" />
-            <span className="dr__buy-price">{fmtUSD(nextCost)}</span>
-          </div>
-        </button>
-
-        {/* Hire staff ticket */}
+        {/* Hire staff ticket (top) */}
         {!dp.hasManager && dp.qty > 0 && (
           <div
             className="dr__hire-ticket"
@@ -127,6 +114,19 @@ export default function DrinkRow({ def, dp, progress, canAffordBuy, onTap, onBuy
             <span className="dr__hire-cost">{fmtUSD(def.managerCost)}</span>
           </div>
         )}
+
+        {/* Buy ticket (bottom) */}
+        <button
+          ref={buyRef}
+          className={`dr__buy ${canAffordBuy ? 'dr__buy--on' : ''}`}
+          onPointerDown={e => { e.stopPropagation(); onBuy() }}
+        >
+          <div className="dr__buy-inner">
+            <span className="dr__buy-arrow">↑</span>
+            <div className="dr__buy-tear" />
+            <span className="dr__buy-price">{fmtUSD(nextCost)}</span>
+          </div>
+        </button>
       </div>
     </div>
   )
