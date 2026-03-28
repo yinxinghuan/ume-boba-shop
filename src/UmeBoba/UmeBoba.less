@@ -224,6 +224,38 @@
     backdrop-filter: blur(10px);
   }
 
+  // ── Buy mode toggle ───────────────────────────────────────────────────────
+  &__buy-mode {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    padding: 8px 12px 6px;
+    border-bottom: 1px solid rgba(255,255,255,0.05);
+  }
+
+  &__buy-mode-btn {
+    flex: 1;
+    height: 30px;
+    border: 1.5px solid rgba(255,255,255,0.15);
+    border-radius: 8px;
+    background: rgba(255,255,255,0.06);
+    color: rgba(255,255,255,0.4);
+    font-family: inherit;
+    font-size: 13px;
+    font-weight: 800;
+    cursor: pointer;
+    touch-action: none;
+    -webkit-tap-highlight-color: transparent;
+    transition: all 0.12s;
+
+    &--active {
+      background: rgba(255,215,0,0.18);
+      border-color: rgba(255,215,0,0.55);
+      color: #ffd700;
+    }
+    &:active { transform: scale(0.92); }
+  }
+
   // ── Locked row teaser ─────────────────────────────────────────────────────
   &__locked-row {
     display: flex;

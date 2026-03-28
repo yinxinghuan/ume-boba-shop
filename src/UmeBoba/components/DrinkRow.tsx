@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
 import type { DrinkDef, DrinkProgress } from '../types'
-import { buyCost, cycleMs, fmtUSD, fmtMs, incomePerCycle } from '../constants'
+import { buyCost, maxBuyQty, cycleMs, fmtUSD, fmtMs, incomePerCycle } from '../constants'
 import { t } from '../i18n'
 import './DrinkRow.less'
 
@@ -39,15 +39,18 @@ function getManagerSprite(drinkId: string, done = false): string {
   return GUIDE_SPRITES[`../img/guides/${char}_${expr}.png`] ?? ''
 }
 
+export type BuyMode = 1 | 10 | 'max'
+
 interface Props {
   def: DrinkDef
   dp: DrinkProgress
   progress: number
   shopMult: number
-  canAffordBuy: boolean
+  coins: number
+  buyMode: BuyMode
   canAffordManager: boolean
   onTap: (x: number, y: number) => void
-  onBuy: () => void
+  onBuy: (qty: number) => void
   onManager: () => void
   rowRef?: React.RefObject<HTMLDivElement>
   buyRef?: React.RefObject<HTMLButtonElement>
@@ -56,22 +59,31 @@ interface Props {
 interface Particle { id: number; x: number; y: number; tx: number; ty: number; rot: number; dur: number }
 
 export default function DrinkRow({
-  def, dp, progress, shopMult, canAffordBuy, canAffordManager,
+  def, dp, progress, shopMult, coins, buyMode, canAffordManager,
   onTap, onBuy, onManager, rowRef, buyRef
 }: Props) {
   const ready    = progress >= 1 && !dp.hasManager && dp.cycleStarted > 0
   const waiting  = dp.cycleStarted === 0 && dp.qty > 0 && !dp.hasManager
   const income   = incomePerCycle(def, dp.qty, shopMult)
   const ms       = cycleMs(def, dp.qty)
-  const nextCost = buyCost(def, dp.qty)
   const showHire = dp.qty > 0
+
+  // Buy quantity based on mode
+  const affordable = maxBuyQty(def, dp.qty, coins)
+  const wantQty    = buyMode === 'max' ? Math.max(1, affordable) : buyMode
+  const actualQty  = Math.max(1, Math.min(wantQty, Math.max(1, affordable)))
+  const totalCost  = buyCost(def, dp.qty, actualQty)
+  const canAffordBuy = coins >= totalCost
+
+  // Next milestone
+  const nextMilestone = def.milestones.find(m => m > dp.qty)
 
   const [particles, setParticles] = useState<Particle[]>([])
   const [buyFlash, setBuyFlash] = useState(false)
 
   function handleBuyPress(e: React.PointerEvent<HTMLButtonElement>) {
     e.stopPropagation()
-    onBuy()
+    onBuy(actualQty)
     const rect = e.currentTarget.getBoundingClientRect()
     const cx = rect.left + rect.width / 2
     const cy = rect.top + rect.height / 2
@@ -100,14 +112,19 @@ export default function DrinkRow({
       {/* ── Icon ── */}
       <div className="dr__icon">
         <img src={DRINK_IMGS[def.id]} alt={def.nameZh} draggable={false} className="dr__img" />
-        {dp.qty > 0 && <div key={dp.qty} className="dr__qty">{dp.qty}</div>}
+        {dp.qty > 0 && (
+          <div className="dr__qty-wrap">
+            <div key={dp.qty} className="dr__qty">{dp.qty}</div>
+            {nextMilestone && <div className="dr__next-ms">→{nextMilestone}</div>}
+          </div>
+        )}
       </div>
 
       {/* ── Center ── */}
       <div className="dr__center">
         <div className="dr__meta">
           {dp.qty > 0
-            ? <span className="dr__income">{fmtUSD(income)}<em>/次</em></span>
+            ? <span className="dr__income">{fmtUSD(income / ms * 1000)}<em>/秒</em></span>
             : <span className="dr__name">{def.nameZh}</span>
           }
           {dp.qty > 0 && <span className="dr__name dr__name--meta">{def.nameZh}</span>}
@@ -158,11 +175,13 @@ export default function DrinkRow({
           <div className={`dr__buy-inner ${dp.qty === 0 ? 'dr__buy-inner--unlock' : ''}`}>
             {dp.qty === 0 ? (
               <span className="dr__buy-label">{t('research')}</span>
+            ) : actualQty > 1 ? (
+              <span className="dr__buy-multi">×{actualQty}</span>
             ) : (
               <span className="dr__buy-arrow" />
             )}
             <div className="dr__buy-tear" />
-            <span className="dr__buy-price">{fmtUSD(nextCost)}</span>
+            <span className="dr__buy-price">{fmtUSD(totalCost)}</span>
           </div>
         </button>
 

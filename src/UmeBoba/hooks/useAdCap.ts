@@ -149,16 +149,16 @@ export function useAdCap(
     })
   }, [])
 
-  // ── Buy 1 unit ────────────────────────────────────────────────────────────
-  const buyDrink = useCallback((drinkId: string) => {
+  // ── Buy units ─────────────────────────────────────────────────────────────
+  const buyDrink = useCallback((drinkId: string, qty: number = 1) => {
     setSave(s => {
       const dp = s.drinks[drinkId]
       const def = DRINKS.find(d => d.id === drinkId)!
-      const cost = buyCost(def, dp.qty)
+      const cost = buyCost(def, dp.qty, qty)
       if (s.coins < cost) return s
       playBuy()
-      const newQty = dp.qty + 1
-      const cycleStarted = newQty === 1 ? Date.now() : dp.cycleStarted
+      const newQty = dp.qty + qty
+      const cycleStarted = dp.qty === 0 ? Date.now() : dp.cycleStarted
       return {
         ...s,
         coins: s.coins - cost,

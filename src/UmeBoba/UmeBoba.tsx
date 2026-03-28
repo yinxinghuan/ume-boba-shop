@@ -8,13 +8,13 @@ import { useGameScore } from './hooks/useGameScore'
 import { useShopImage } from './hooks/useShopImage'
 import SplashScreen from './components/SplashScreen'
 import StartScreen from './components/StartScreen'
-import DrinkRow from './components/DrinkRow'
+import DrinkRow, { type BuyMode } from './components/DrinkRow'
 import GuidePopup from './components/GuidePopup'
 import TutorialLayer from './components/TutorialLayer'
 import Leaderboard from './components/Leaderboard'
 import ShopView from './components/ShopView'
 import HelpPanel from './components/HelpPanel'
-import { DRINKS, buyCost, fmt, fmtUSD, incomePerCycle, cycleMs, getShopLevel, prestigeGain, prestigeMultiplier, PRESTIGE_THRESHOLD } from './constants'
+import { DRINKS, fmt, fmtUSD, incomePerCycle, cycleMs, getShopLevel, prestigeGain, prestigeMultiplier, PRESTIGE_THRESHOLD } from './constants'
 import { playUnlock, isMuted, setMuted } from './utils/sounds'
 import type { GameSave } from './types'
 import imgBgShop from './img/bg_shop.png'
@@ -60,6 +60,7 @@ export default function UmeBoba() {
   const [showHelp, setShowHelp] = useState(false)
   const [showPrestige, setShowPrestige] = useState(false)
   const [muted, setMutedState] = useState(isMuted())
+  const [buyMode, setBuyMode] = useState<BuyMode>(1)
 
   function toggleMute() {
     const next = !muted
@@ -259,6 +260,19 @@ export default function UmeBoba() {
           currentImage={shopImages.current}
         />
 
+        {/* Buy mode toggle */}
+        <div className="ub__buy-mode">
+          {([1, 10, 'max'] as const).map(m => (
+            <button
+              key={m}
+              className={`ub__buy-mode-btn ${buyMode === m ? 'ub__buy-mode-btn--active' : ''}`}
+              onPointerDown={() => setBuyMode(m)}
+            >
+              {m === 'max' ? '最多' : `×${m}`}
+            </button>
+          ))}
+        </div>
+
         {visibleDrinks.map((def, i) => (
           <DrinkRow
             key={def.id}
@@ -266,10 +280,11 @@ export default function UmeBoba() {
             dp={save.drinks[def.id]}
             progress={progress[def.id] ?? 0}
             shopMult={effectiveMult}
-            canAffordBuy={save.coins >= buyCost(def, save.drinks[def.id]?.qty ?? 0)}
+            coins={save.coins}
+            buyMode={buyMode}
             canAffordManager={save.coins >= def.managerCost}
             onTap={(x, y) => tapDrink(def.id, x, y)}
-            onBuy={() => buyDrink(def.id)}
+            onBuy={(qty) => buyDrink(def.id, qty)}
             onManager={() => hireManager(def.id)}
             rowRef={i === 0 ? firstDrinkRowRef : undefined}
             buyRef={i === 0 ? firstBuyBtnRef : undefined}
