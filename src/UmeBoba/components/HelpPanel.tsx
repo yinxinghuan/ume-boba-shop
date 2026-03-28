@@ -1,11 +1,8 @@
 import React from 'react'
-import imgStepTea   from '../img/step_tea.png'
-import imgStepPearl from '../img/step_pearl.png'
-import imgStepSeal  from '../img/step_seal.png'
-import imgDrink     from '../img/drink_pearl_milk_tea.png'
 import imgShop      from '../img/shops/level6.png'
 import imgYoome     from '../img/guides/yoome_happy.png'
 import imgBubble    from '../img/guides/bubblepearl_happy.png'
+import imgDrink     from '../img/drink_pearl_milk_tea.png'
 import './HelpPanel.less'
 
 interface Props { onClose: () => void }
@@ -21,67 +18,49 @@ export default function HelpPanel({ onClose }: Props) {
           <button className="ub-hp__close" onPointerDown={onClose}>✕</button>
         </div>
 
-        {/* ── Section 1: 收益循环 ── */}
-        <div className="ub-hp__section-label">收益循环</div>
-        <div className="ub-hp__cycle">
-          <CycleStep img={imgStepTea}   label="点击开始" />
-          <div className="ub-hp__cycle-arrow">→</div>
-          <CycleStep img={imgStepPearl} label="等进度满" />
-          <div className="ub-hp__cycle-arrow">→</div>
-          <CycleStep img={imgStepSeal}  label="点击收取" />
-        </div>
-        <p className="ub-hp__cycle-note">进度条变金色后再点一次，美元就到手了</p>
-
-        {/* ── Section 2: 升级票 ── */}
-        <div className="ub-hp__section-label">升级票</div>
+        {/* ── 收益倍率 ── */}
+        <div className="ub-hp__section-label">收益倍率</div>
         <HelpRow
           img={imgDrink} imgSize={56} accent="#ffd700"
-          title="买更多杯数"
+          title="杯数越多，收益越高"
           lines={[
-            '数量越多 → 每轮收益越高、速度越快',
-            '10 / 25 / 50 / 100 杯时收益大跳升',
+            '每多一杯，每轮收益线性增加',
+            '10 / 25 / 50 / 100 杯时收益大幅跳升',
+            '店铺等级提升后，全局收益倍率同步上涨',
           ]}
         />
 
-        {/* ── Section 3: 招聘票 ── */}
-        <div className="ub-hp__section-label">招聘票</div>
+        {/* ── 店员 ── */}
+        <div className="ub-hp__section-label">自动化</div>
         <HelpRow
           img={imgYoome} imgSize={72} accent="#c084fc"
-          title="雇用店员，自动打工"
+          title="雇用店员，自动收益"
           lines={[
-            '雇用后进度满自动收取，无需盯屏幕',
-            '关掉游戏也能赚取离线收益',
+            '雇用后进度满自动收取，无需手动点击',
+            '关掉游戏也能积累离线收益',
           ]}
         />
 
-        {/* ── Section 4: 店铺升级 ── */}
-        <div className="ub-hp__section-label">店铺升级</div>
+        {/* ── 转生结晶 ── */}
+        <div className="ub-hp__section-label">月球转生 🌙</div>
         <HelpRow
-          img={imgShop} imgSize={64} accent="#34d399"
-          title="收益越高，等级越高"
+          img={imgShop} imgSize={64} accent="#d4aaff"
+          title="重置换结晶，永久提升倍率"
           lines={[
-            '累计总收益提升店铺等级',
-            '等级越高，全局收益倍率越高',
+            '总收入达到 $50M 后可进行转生',
+            '转生获得🌙结晶，结晶越多全局倍率越高',
+            '排行榜以结晶数量排名',
           ]}
         />
 
         {/* ── Tip ── */}
         <div className="ub-hp__tip">
           <img src={imgBubble} alt="" draggable={false} className="ub-hp__tip-char" />
-          <span>💡 招满所有饮品的店员，关掉手机也能赚钱！</span>
+          <span>💡 招满所有店员 → 攒到 $50M → 转生！每次都比上次快！</span>
         </div>
 
         <button className="ub-hp__btn" onPointerDown={onClose}>知道了！</button>
       </div>
-    </div>
-  )
-}
-
-function CycleStep({ img, label }: { img: string; label: string }) {
-  return (
-    <div className="ub-hp__step">
-      <img src={img} alt={label} draggable={false} className="ub-hp__step-img" />
-      <span className="ub-hp__step-label">{label}</span>
     </div>
   )
 }

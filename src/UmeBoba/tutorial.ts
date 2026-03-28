@@ -16,85 +16,71 @@ export interface TutorialStep {
 }
 
 export const TUTORIAL_STEPS: TutorialStep[] = [
+  // ── 1. 欢迎 ────────────────────────────────────────────────────────────────
   {
     kind: 'dialog',
     dialog: {
       char: 'yoome', expr: 'happy',
-      lines: ['欢迎来到 UMe 奶茶店！', '我是 YooMe～', '来，我教你怎么开始赚美元！'],
+      lines: ['欢迎来到 UMe 奶茶店！', '点饮品 → 等进度满 → 点击收取', '赚到的美元就是你的收益！'],
     },
   },
-  {
-    kind: 'dialog',
-    dialog: {
-      char: 'yoome', expr: 'normal',
-      lines: ['看到下面这行珍珠奶茶了吗？', '点一下它，进度条就开始走！', '→ 试试点一下吧！'],
-    },
-  },
+  // ── 2. 点饮品 ──────────────────────────────────────────────────────────────
   {
     kind: 'wait_tap_drink',
     highlight: 'drink_row',
     arrowText: '点这里！',
   },
-  {
-    kind: 'dialog',
-    dialog: {
-      char: 'yoome', expr: 'normal',
-      lines: ['进度条开始走了！', '等它走满变成金色，', '再点一次就能收美元！'],
-    },
-  },
+  // ── 3. 等进度满 ────────────────────────────────────────────────────────────
   {
     kind: 'wait_bar_full',
   },
-  {
-    kind: 'dialog',
-    dialog: {
-      char: 'yoome', expr: 'surprised',
-      lines: ['进度条满了！✨', '快点一下这行，', '把美元收起来！'],
-    },
-  },
+  // ── 4. 收取 ────────────────────────────────────────────────────────────────
   {
     kind: 'wait_collect',
     highlight: 'drink_row',
-    arrowText: '点这里收取！',
+    arrowText: '收取！',
   },
-  {
-    kind: 'dialog',
-    dialog: {
-      char: 'yoome', expr: 'happy',
-      lines: ['收到了！这是你的第一笔美元！', '现在教你怎么赚更多——'],
-    },
-  },
+  // ── 5. 买更多 → 收益说明 ────────────────────────────────────────────────
   {
     kind: 'dialog',
     dialog: {
       char: 'melonmick', expr: 'normal',
-      lines: ['嘿！看右边的升级票！', '买更多杯数，每轮收益越高，', '速度也越快！来买一张！'],
+      lines: ['杯数越多，每轮收益越高！', '达到 10、25、50、100 杯时', '收益还会大幅跳升！'],
     },
   },
   {
     kind: 'wait_buy',
     highlight: 'buy_btn',
-    arrowText: '点这里买！',
+    arrowText: '买更多！',
   },
+  // ── 6. 转生结晶系统 ─────────────────────────────────────────────────────
   {
     kind: 'dialog',
     dialog: {
-      char: 'melonmick', expr: 'happy',
-      lines: ['买了！进度条是不是快了一点？', '数量越多 → 收益越高、速度越快！', '这是最重要的秘诀！'],
+      char: 'lemonshark', expr: 'surprised',
+      lines: ['店铺收入越高，等级越高！', '全局收益倍率随等级上升，', '最终能解锁月球旗舰站！'],
     },
   },
   {
     kind: 'dialog',
     dialog: {
-      char: 'lemonshark', expr: 'normal',
-      lines: ['最后一招——招店员！', '看升级票左边的招聘票，', '雇了之后自动收，关掉游戏也赚钱！'],
+      char: 'bubblepearl', expr: 'happy',
+      lines: ['总收入达到 $50M 后，', '可以进行「月球转生」🌙', '重置换结晶，全局收益永久提升！'],
     },
   },
+  {
+    kind: 'dialog',
+    dialog: {
+      char: 'bubblepearl', expr: 'normal',
+      lines: ['结晶越多，倍率越高，', '每次转生后推进速度更快，', '排行榜也以结晶数量排名！'],
+    },
+  },
+  // ── 7. 收尾 ─────────────────────────────────────────────────────────────
   {
     kind: 'dialog',
     dialog: {
       char: 'yoome', expr: 'happy',
-      lines: ['你学会了！', '赚美元、买更多、招店员，', '解锁更多饮品～今天的奶茶加点可爱吗？✨'],
+      lines: ['招满店员、解锁所有饮品，', '攒够 $50M 就能转生了！', '加油，星际奶茶帝国等你来建！✨'],
     },
   },
 ]
