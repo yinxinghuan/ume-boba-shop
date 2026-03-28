@@ -115,7 +115,6 @@ export default function DrinkRow({
                 <img src={getManagerSprite(def.id)} alt="" draggable={false} className="dr__hire-char" />
               )}
               <span className="dr__hire-label">Employ</span>
-              <div className="dr__hire-tear" />
               <span className="dr__hire-cost">{fmtUSD(def.managerCost)}</span>
             </div>
           )

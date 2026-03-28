@@ -2,46 +2,45 @@
 @pink:  #f8a4c8;
 @pink2: #e8709c;
 
-// ── Hire ticket mask: scallops top+bottom, notches left+right ─────────────
+// ── Hire ticket: full stamp/postage on ALL 4 sides ────────────────────────
+// Strategy: base (all opaque) - subtract repeating circles on each edge
 .hire-mask() {
-  @notch-r:    8px;
-  @notch-rp:   8.5px;
-  @scallop-r:  5px;
-  @scallop-rp: 5.5px;
-  @scallop-s:  12px;
+  @r:  7px;     // scallop circle radius
+  @rp: 7.5px;
+  @s:  15px;    // scallop spacing
 
   -webkit-mask-image:
-    radial-gradient(circle at 0%   50%, transparent @notch-r,   black @notch-rp),
-    radial-gradient(circle at 100% 50%, transparent @notch-r,   black @notch-rp),
-    radial-gradient(circle at 50%  0%,  transparent @scallop-r, black @scallop-rp),
-    radial-gradient(circle at 50% 100%, transparent @scallop-r, black @scallop-rp);
-  // scallop tiles must be full-height (100%) so the middle of the element
-  // stays visible under mask-composite:intersect
-  -webkit-mask-size:     100% 100%, 100% 100%, @scallop-s 100%, @scallop-s 100%;
-  -webkit-mask-position: 0 0, 0 0, 0 0, 0 0;
-  -webkit-mask-repeat:   no-repeat, no-repeat, repeat-x, repeat-x;
-  -webkit-mask-composite: destination-in, destination-in, destination-in;
+    radial-gradient(circle at 50% 0%,   black @r, transparent @rp),
+    radial-gradient(circle at 50% 100%, black @r, transparent @rp),
+    radial-gradient(circle at 0%   50%, black @r, transparent @rp),
+    radial-gradient(circle at 100% 50%, black @r, transparent @rp),
+    linear-gradient(black, black);
+  -webkit-mask-size:     @s @s,    @s @s,    @s @s,    @s @s,    100% 100%;
+  -webkit-mask-position: 0 0,      0 100%,   0 0,      100% 0,   0 0;
+  -webkit-mask-repeat:   repeat-x, repeat-x, repeat-y, repeat-y, no-repeat;
+  -webkit-mask-composite: destination-out, destination-out, destination-out, destination-out;
 
   mask-image:
-    radial-gradient(circle at 0%   50%, transparent @notch-r,   black @notch-rp),
-    radial-gradient(circle at 100% 50%, transparent @notch-r,   black @notch-rp),
-    radial-gradient(circle at 50%  0%,  transparent @scallop-r, black @scallop-rp),
-    radial-gradient(circle at 50% 100%, transparent @scallop-r, black @scallop-rp);
-  mask-size:     100% 100%, 100% 100%, @scallop-s 100%, @scallop-s 100%;
-  mask-position: 0 0, 0 0, 0 0, 0 0;
-  mask-repeat:   no-repeat, no-repeat, repeat-x, repeat-x;
-  mask-composite: intersect, intersect, intersect;
+    radial-gradient(circle at 50% 0%,   black @r, transparent @rp),
+    radial-gradient(circle at 50% 100%, black @r, transparent @rp),
+    radial-gradient(circle at 0%   50%, black @r, transparent @rp),
+    radial-gradient(circle at 100% 50%, black @r, transparent @rp),
+    linear-gradient(black, black);
+  mask-size:     @s @s,    @s @s,    @s @s,    @s @s,    100% 100%;
+  mask-position: 0 0,      0 100%,   0 0,      100% 0,   0 0;
+  mask-repeat:   repeat-x, repeat-x, repeat-y, repeat-y, no-repeat;
+  mask-composite: subtract, subtract, subtract, subtract;
 }
 
-// ── Buy ticket mask: notches left+right only ──────────────────────────────
+// ── Buy ticket: single notch cut from left & right at center height ───────
 .notch-mask() {
   -webkit-mask-image:
-    radial-gradient(circle at 0%   50%, transparent 8px, black 8.5px),
-    radial-gradient(circle at 100% 50%, transparent 8px, black 8.5px);
+    radial-gradient(circle at 0%   50%, transparent 11px, black 11.5px),
+    radial-gradient(circle at 100% 50%, transparent 11px, black 11.5px);
   -webkit-mask-composite: destination-in;
   mask-image:
-    radial-gradient(circle at 0%   50%, transparent 8px, black 8.5px),
-    radial-gradient(circle at 100% 50%, transparent 8px, black 8.5px);
+    radial-gradient(circle at 0%   50%, transparent 11px, black 11.5px),
+    radial-gradient(circle at 100% 50%, transparent 11px, black 11.5px);
   mask-composite: intersect;
 }
 
@@ -205,32 +204,28 @@
     border-left: 1px solid rgba(255,255,255,0.06);
   }
 
-  // ── Hire ticket ───────────────────────────────────────────────────────────
-  // Layout: flex-column, character img absolute behind, labels on top
+  // ── Hire ticket (stamp / postage) ─────────────────────────────────────────
   &__hire {
     flex: 1;
     position: relative;
     overflow: hidden;
     display: flex;
     flex-direction: column;
-    align-items: center;
-    justify-content: center;
     cursor: pointer;
     touch-action: none;
     -webkit-tap-highlight-color: transparent;
-    background: rgba(255,255,255,0.06);
-    color: rgba(255,255,255,0.3);
+    background: rgba(255,255,255,0.1);
+    color: rgba(255,255,255,0.5);
     transition: transform 0.1s;
     .hire-mask();
 
-    // affordable: pink background
     &--on {
-      background: @pink2;
+      background: var(--accent, @pink2);
       color: rgba(0,0,0,0.82);
     }
     &:active { transform: scale(0.93); }
 
-    // hired: dark bg, character fills, no text, same stamp mask
+    // hired: dark bg, character fills, no text
     &--done {
       cursor: default;
       background: rgba(0,0,0,0.5);
@@ -238,53 +233,49 @@
     }
   }
 
-  // character image — absolute, fills the ticket (z-index 0, behind labels)
+  // character image: absolute, fills the ticket (behind text)
   &__hire-char {
     position: absolute;
-    inset: 0;
+    bottom: 0;
+    left: 50%;
+    transform: translateX(-50%);
     width: 100%;
-    height: 110%;
-    bottom: -5%;
+    height: 92%;
     object-fit: contain;
     object-position: bottom center;
     pointer-events: none;
     z-index: 0;
+
+    .dr__hire--done & {
+      height: 115%;
+      bottom: -5%;
+      object-fit: contain;
+      object-position: bottom center;
+    }
   }
 
-  // text labels sit above the character
   &__hire-label {
-    position: relative;
-    z-index: 1;
-    font-size: 14px;
-    font-weight: 900;
-    text-align: center;
-    padding: 0 4px;
-    letter-spacing: 0.3px;
-  }
-
-  // horizontal dotted tear line (dots, not dashes)
-  &__hire-tear {
-    position: relative;
-    z-index: 1;
-    width: 85%;
-    margin: 5px 0;
-    border: none;
-    border-top: 3px dotted currentColor;
-    opacity: 0.6;
-    flex-shrink: 0;
-  }
-
-  &__hire-cost {
     position: relative;
     z-index: 1;
     font-size: 15px;
     font-weight: 900;
+    padding: 8px 0 0 8px;
+    letter-spacing: 0.3px;
+    line-height: 1;
+  }
+
+  &__hire-cost {
+    position: absolute;
+    bottom: 7px;
+    left: 0; right: 0;
+    z-index: 1;
+    font-size: 16px;
+    font-weight: 900;
     text-align: center;
-    padding: 0 4px;
     letter-spacing: -0.5px;
   }
 
-  // ── Buy ticket ────────────────────────────────────────────────────────────
+  // ── Buy ticket (side notch) ───────────────────────────────────────────────
   &__buy {
     flex: 1;
     display: flex;
@@ -306,18 +297,16 @@
       align-items: center;
       justify-content: center;
       gap: 0;
-      border-radius: 10px;
-      background: rgba(255,255,255,0.07);
-      color: rgba(255,255,255,0.25);
-      box-shadow: 0 3px 0 rgba(0,0,0,0.3);
-      transition: background 0.12s, color 0.12s, box-shadow 0.12s;
+      border-radius: 12px;
+      background: rgba(255,255,255,0.1);
+      color: rgba(255,255,255,0.5);
+      transition: background 0.12s, color 0.12s;
       .notch-mask();
     }
 
     &--on &-inner {
       background: rgba(255,255,255,0.93);
-      color: rgba(0,0,0,0.8);
-      box-shadow: 0 4px 0 rgba(0,0,0,0.15);
+      color: rgba(0,0,0,0.82);
     }
 
     &:active { transform: scale(0.93); }
@@ -325,27 +314,27 @@
 
   &__buy-arrow {
     display: block;
-    font-size: 26px;
+    font-size: 28px;
     line-height: 1;
     font-weight: 900;
     padding: 12px 0 8px;
   }
 
+  // Round dots tear line
   &__buy-tear {
-    width: 82%;
-    height: 1px;
-    background: repeating-linear-gradient(
-      90deg,
-      currentColor 0px, currentColor 4px,
-      transparent 4px, transparent 8px
-    );
-    opacity: 0.5;
+    width: 84%;
+    height: 5px;
+    background: radial-gradient(circle at center, currentColor 2.5px, transparent 2.5px);
+    background-size: 11px 5px;
+    background-repeat: repeat-x;
+    background-position: 0 50%;
+    opacity: 0.75;
     flex-shrink: 0;
   }
 
   &__buy-price {
     display: block;
-    font-size: 15px;
+    font-size: 16px;
     font-weight: 900;
     padding: 8px 4px 12px;
     white-space: nowrap;
