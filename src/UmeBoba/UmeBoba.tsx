@@ -280,17 +280,29 @@ export default function UmeBoba() {
           </div>
         )}
 
-        {/* ── Prestige row ─────────────────────────────────────────────── */}
+        {/* ── Prestige ticket ──────────────────────────────────────────── */}
         {save.totalEarned >= PRESTIGE_THRESHOLD && (
-          <div className="ub__prestige-row" onPointerDown={() => setShowPrestige(true)}>
-            <span className="ub__prestige-icon">🌙</span>
-            <div className="ub__prestige-text">
-              <div className="ub__prestige-title">月球转生</div>
-              <div className="ub__prestige-sub">
-                重置获得 +{prestigeGain(save.totalEarned)} 结晶 · 当前 {save.prestige ?? 0} 🌙
+          <div className="ub__prestige-ticket" onPointerDown={() => setShowPrestige(true)}>
+            <div className="ub__prestige-ticket__bg" />
+            <div className="ub__prestige-ticket__stars">✦ ✦ ✦ ✦ ✦</div>
+            <div className="ub__prestige-ticket__left">
+              <div className="ub__prestige-ticket__moon">🌙</div>
+              <div className="ub__prestige-ticket__label">PRESTIGE</div>
+            </div>
+            <div className="ub__prestige-ticket__body">
+              <div className="ub__prestige-ticket__title">月球转生</div>
+              <div className="ub__prestige-ticket__gain">
+                获得 <strong>+{prestigeGain(save.totalEarned)}</strong> 🌙 结晶
+              </div>
+              <div className="ub__prestige-ticket__current">
+                当前 {save.prestige ?? 0} 🌙 · 转生后 ×{prestigeMultiplier((save.prestige ?? 0) + prestigeGain(save.totalEarned)).toFixed(1)} 全局收益
               </div>
             </div>
-            <span className="ub__prestige-arrow">›</span>
+            <div className="ub__prestige-ticket__tear" />
+            <div className="ub__prestige-ticket__cta">
+              <span>立即</span>
+              <span>转生</span>
+            </div>
           </div>
         )}
 
