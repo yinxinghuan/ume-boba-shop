@@ -49,7 +49,7 @@ export default function StartScreen({ playerName, playerAvatar, bestScore, isInA
           <div className="ss__greeting">
             {playerAvatar && <img src={playerAvatar} alt="" draggable={false} className="ss__avatar" />}
             <span>{playerName}</span>
-            {bestScore > 0 && <span className="ss__best">· 最高 {fmt(bestScore)}</span>}
+            {bestScore > 0 && <span className="ss__best">· 🌙 {bestScore} 结晶</span>}
           </div>
         )}
 

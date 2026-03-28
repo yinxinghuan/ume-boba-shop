@@ -157,30 +157,29 @@ export default function UmeBoba() {
   }, [visibleDrinks.length, loaded])
 
   // ── Score submission ───────────────────────────────────────────────────────
-  // Submit totalEarned every 60 seconds + on page-hide
-  const lastSubmittedRef = useRef(0)
+  // Submit prestige crystal count every 60 seconds + on page-hide
+  const crystals = save.prestige ?? 0
+  const lastSubmittedRef = useRef(-1)
   useEffect(() => {
     if (!loaded) return
     const id = setInterval(() => {
-      if (save.totalEarned > lastSubmittedRef.current) {
-        submitScore(save.totalEarned)
-        lastSubmittedRef.current = save.totalEarned
+      if (crystals > lastSubmittedRef.current) {
+        submitScore(crystals)
+        lastSubmittedRef.current = crystals
       }
     }, 60_000)
     return () => clearInterval(id)
-  }, [loaded, save.totalEarned, submitScore])
+  }, [loaded, crystals, submitScore])
 
   useEffect(() => {
-    const handler = () => {
-      if (save.totalEarned > 0) submitScore(save.totalEarned)
-    }
+    const handler = () => { submitScore(crystals) }
     window.addEventListener('pagehide', handler)
     document.addEventListener('visibilitychange', handler)
     return () => {
       window.removeEventListener('pagehide', handler)
       document.removeEventListener('visibilitychange', handler)
     }
-  }, [save.totalEarned, submitScore])
+  }, [crystals, submitScore])
 
   // ── Screen routing ─────────────────────────────────────────────────────────
 
@@ -193,7 +192,7 @@ export default function UmeBoba() {
       <StartScreen
         playerName={aigramUser?.name ?? null}
         playerAvatar={aigramUser?.head_url ?? null}
-        bestScore={initSave.totalEarned}
+        bestScore={initSave.prestige ?? 0}
         isInAigram={isInAigram}
         onPlay={() => setScreen('playing')}
         onReset={() => { setSave(defaultSave()); localStorage.removeItem('ume-boba-tutorial-done') }}
