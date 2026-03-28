@@ -156,11 +156,11 @@ export function incomePerCycle(def: DrinkDef, qty: number, shopMult = 1): number
 // ── Prestige ──────────────────────────────────────────────────────────────────
 
 /** Minimum totalEarned to trigger prestige */
-export const PRESTIGE_THRESHOLD = 800_000
+export const PRESTIGE_THRESHOLD = 50_000_000
 
 /** Moon crystals earned from a prestige at the given totalEarned */
 export function prestigeGain(totalEarned: number): number {
-  return Math.max(1, Math.floor(Math.sqrt(totalEarned / 10_000)))
+  return Math.max(1, Math.floor(Math.sqrt(totalEarned / 5_000_000)))
 }
 
 /** Global income multiplier from accumulated crystals (+20% each) */
