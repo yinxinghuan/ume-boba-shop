@@ -82,7 +82,7 @@ export default function StartScreen({ playerName, playerAvatar, bestScore, hasSa
             <div className="ss__confirm-body">当前进度将会清空，无法恢复。</div>
             <div className="ss__confirm-btns">
               <button className="ss__confirm-btn ss__confirm-btn--cancel" onPointerDown={() => setShowReset(false)}>取消</button>
-              <button className="ss__confirm-btn ss__confirm-btn--ok" onPointerDown={onReset}>确认重置</button>
+              <button className="ss__confirm-btn ss__confirm-btn--ok" onPointerDown={() => { onReset(); setShowReset(false) }}>确认重置</button>
             </div>
           </div>
         </div>
