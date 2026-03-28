@@ -6,8 +6,8 @@ export const SHOP_LEVELS: ShopLevel[] = [
   { level: 2, nameZh: '小奶茶铺',       threshold: 5_000,       multiplier: 1.5,  unlockDrinkId: 'watermelon'     },
   { level: 3, nameZh: '城市旗舰店',     threshold: 40_000,      multiplier: 2,    unlockDrinkId: 'mango'          },
   { level: 4, nameZh: '跨国连锁集团',   threshold: 250_000,     multiplier: 3,    unlockDrinkId: 'lemon'          },
-  { level: 5, nameZh: '星际奶茶公司',   threshold: 1_500_000,   multiplier: 5,    unlockDrinkId: 'avocado'        },
-  { level: 6, nameZh: '月球旗舰站',     threshold: 10_000_000,  multiplier: 10,   unlockDrinkId: 'angel'          },
+  { level: 5, nameZh: '星际奶茶公司',   threshold: 1_500_000,   multiplier: 4,    unlockDrinkId: 'avocado'        },
+  { level: 6, nameZh: '月球旗舰站',     threshold: 10_000_000,  multiplier: 6,    unlockDrinkId: 'angel'          },
 ]
 
 export function getShopLevel(totalEarned: number): ShopLevel {
@@ -130,11 +130,11 @@ export function maxBuyQty(def: DrinkDef, owned: number, budget: number): number 
   return qty
 }
 
-/** Actual cycle ms accounting for milestones (each milestone cuts 35%, min 200ms) */
+/** Actual cycle ms accounting for milestones (each milestone cuts 20%, min 300ms) */
 export function cycleMs(def: DrinkDef, qty: number): number {
   let ms = def.baseCycleMs
   for (const m of def.milestones) {
-    if (qty >= m) ms = Math.max(200, ms * 0.65)
+    if (qty >= m) ms = Math.max(300, ms * 0.80)
   }
   return ms
 }
@@ -156,11 +156,11 @@ export function incomePerCycle(def: DrinkDef, qty: number, shopMult = 1): number
 // ── Prestige ──────────────────────────────────────────────────────────────────
 
 /** Minimum totalEarned to trigger prestige */
-export const PRESTIGE_THRESHOLD = 50_000_000
+export const PRESTIGE_THRESHOLD = 1_000_000_000
 
 /** Moon crystals earned from a prestige at the given totalEarned */
 export function prestigeGain(totalEarned: number): number {
-  return Math.max(1, Math.floor(Math.sqrt(totalEarned / 5_000_000)))
+  return Math.max(1, Math.floor(Math.sqrt(totalEarned / 100_000_000)))
 }
 
 /** Global income multiplier from accumulated crystals (+20% each) */

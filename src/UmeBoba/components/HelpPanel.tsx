@@ -47,7 +47,7 @@ export default function HelpPanel({ onClose }: Props) {
           img={imgShop} imgSize={64} accent="#d4aaff"
           title="重置换结晶，永久提升倍率"
           lines={[
-            '总收入达到 $50M 后可进行转生',
+            '总收入达到 $1B 后可进行转生',
             '转生获得🌙结晶，结晶越多全局倍率越高',
             '排行榜以结晶数量排名',
           ]}
@@ -56,7 +56,7 @@ export default function HelpPanel({ onClose }: Props) {
         {/* ── Tip ── */}
         <div className="ub-hp__tip">
           <img src={imgBubble} alt="" draggable={false} className="ub-hp__tip-char" />
-          <span>💡 招满所有店员 → 攒到 $50M → 转生！每次都比上次快！</span>
+          <span>💡 招满所有店员 → 攒到 $1B → 转生！每次都比上次快！</span>
         </div>
 
         <button className="ub-hp__btn" onPointerDown={onClose}>知道了！</button>

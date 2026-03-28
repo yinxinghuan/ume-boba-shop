@@ -65,7 +65,7 @@ export const TUTORIAL_STEPS: TutorialStep[] = [
     kind: 'dialog',
     dialog: {
       char: 'bubblepearl', expr: 'happy',
-      lines: ['总收入达到 $50M 后，', '可以进行「月球转生」🌙', '重置换结晶，全局收益永久提升！'],
+      lines: ['总收入达到 $1B 后，', '可以进行「月球转生」🌙', '重置换结晶，全局收益永久提升！'],
     },
   },
   {
@@ -80,7 +80,7 @@ export const TUTORIAL_STEPS: TutorialStep[] = [
     kind: 'dialog',
     dialog: {
       char: 'yoome', expr: 'happy',
-      lines: ['招满店员、解锁所有饮品，', '攒够 $50M 就能转生了！', '加油，星际奶茶帝国等你来建！✨'],
+      lines: ['招满店员、解锁所有饮品，', '攒够 $1B 就能转生了！', '加油，星际奶茶帝国等你来建！✨'],
     },
   },
 ]
