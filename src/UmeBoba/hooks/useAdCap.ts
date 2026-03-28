@@ -35,6 +35,7 @@ export interface FloatNum { id: string; value: number; x: number; y: number }
 export function useAdCap(
   initialSave: GameSave,
   onSave: (s: GameSave) => void,
+  active: boolean = false,
 ) {
   const [save, setSave] = useState<GameSave>(initialSave)
   const [floats, setFloats] = useState<FloatNum[]>([])
@@ -51,6 +52,9 @@ export function useAdCap(
       setSave(initialSave)
     }
   }, [initialSave])
+
+  const activeRef = useRef(active)
+  activeRef.current = active
 
   // ── Progress tick ─────────────────────────────────────────────────────────
   useEffect(() => {
@@ -73,7 +77,7 @@ export function useAdCap(
         const pct = Math.min(elapsed / ms, 1)
         newProgress[def.id] = pct
 
-        if (pct >= 1 && dp.hasManager) {
+        if (pct >= 1 && dp.hasManager && activeRef.current) {
           const shopMult = getShopLevel(saveRef.current.totalEarned).multiplier
           earned[def.id] = incomePerCycle(def, dp.qty, shopMult)
         }

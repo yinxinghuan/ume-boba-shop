@@ -91,7 +91,7 @@ export default function UmeBoba() {
   }, [splashDone, saveDone])
 
   const { save, setSave, progress, floats, tapDrink, buyDrink, hireManager } =
-    useAdCap(initSave, persist)
+    useAdCap(initSave, persist, screen === 'playing')
 
   const shopLevel  = getShopLevel(save.totalEarned)
   const shopImages = useShopImage(save.totalEarned, aigramUser?.head_url ?? null, loaded)
