@@ -9,6 +9,7 @@ interface Props {
   playerName:   string | null
   playerAvatar: string | null
   bestScore:    number
+  hasSave:      boolean
   isInAigram:   boolean
   onPlay:   () => void
   onReset:  () => void
@@ -16,7 +17,7 @@ interface Props {
   fetchFriends: () => Promise<LeaderboardEntry[]>
 }
 
-export default function StartScreen({ playerName, playerAvatar, bestScore, isInAigram, onPlay, onReset, fetchGlobal, fetchFriends }: Props) {
+export default function StartScreen({ playerName, playerAvatar, bestScore, hasSave, isInAigram, onPlay, onReset, fetchGlobal, fetchFriends }: Props) {
   const [showLb, setShowLb] = useState(false)
   const [showReset, setShowReset] = useState(false)
   return (
@@ -64,7 +65,7 @@ export default function StartScreen({ playerName, playerAvatar, bestScore, isInA
         </div>
 
         {/* Reset button — only when there's a previous save */}
-        {bestScore > 0 && (
+        {hasSave && (
           <button className="ss__reset-btn" onPointerDown={() => setShowReset(true)}>
             重新开始
           </button>

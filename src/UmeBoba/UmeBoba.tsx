@@ -193,6 +193,7 @@ export default function UmeBoba() {
         playerName={aigramUser?.name ?? null}
         playerAvatar={aigramUser?.head_url ?? null}
         bestScore={initSave.prestige ?? 0}
+        hasSave={initSave.totalEarned > 0 || initSave.coins > 0}
         isInAigram={isInAigram}
         onPlay={() => setScreen('playing')}
         onReset={() => {
