@@ -34,7 +34,7 @@ export const DRINKS: DrinkDef[] = [
     baseIncome: 8,
     buyCostBase: 12,
     buyCostMult: 1.18,
-    managerCost: 12_000,
+    managerCost: 3_000,
     unlockCost: 0,
     milestones: [10, 25, 50, 100],
   },
