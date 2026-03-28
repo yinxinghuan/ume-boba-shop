@@ -195,7 +195,13 @@ export default function UmeBoba() {
         bestScore={initSave.prestige ?? 0}
         isInAigram={isInAigram}
         onPlay={() => setScreen('playing')}
-        onReset={() => { setSave(defaultSave()); localStorage.removeItem('ume-boba-tutorial-done') }}
+        onReset={() => {
+          const fresh = defaultSave()
+          setSave(fresh)
+          setInitSave(fresh)
+          persist(fresh)
+          localStorage.removeItem('ume-boba-tutorial-done')
+        }}
         fetchGlobal={fetchGlobalLeaderboard}
         fetchFriends={fetchFriendsLeaderboard}
       />
