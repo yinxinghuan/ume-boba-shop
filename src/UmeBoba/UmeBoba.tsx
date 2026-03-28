@@ -219,14 +219,14 @@ export default function UmeBoba() {
           )}
         </div>
         <div className="ub__hud-money">
+          {(save.prestige ?? 0) > 0 && (
+            <div className="ub__prestige-badge">
+              🌙 {save.prestige} 结晶 · ×{pMult.toFixed(1)}
+            </div>
+          )}
           <div className="ub__coins">{fmtUSD(save.coins)}</div>
           {perSec >= 0.1 && (
             <div className="ub__per-sec">+{fmtUSD(perSec)}/秒</div>
-          )}
-          {(save.prestige ?? 0) > 0 && (
-            <div className="ub__prestige-badge">
-              🌙 {save.prestige} · ×{pMult.toFixed(1)}
-            </div>
           )}
         </div>
         <div className="ub__hud-right">
