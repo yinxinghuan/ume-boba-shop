@@ -201,6 +201,8 @@ export default function UmeBoba() {
           setSave(fresh)
           setInitSave(fresh)
           persist(fresh)
+          setOfflineCoins(0)
+          setShowOffline(false)
           localStorage.removeItem('ume-boba-tutorial-done')
         }}
         fetchGlobal={fetchGlobalLeaderboard}
