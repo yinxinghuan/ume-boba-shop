@@ -16,6 +16,11 @@ export function useTutorial(
   const onMarkDoneRef = useRef(onMarkDone)
   onMarkDoneRef.current = onMarkDone
 
+  // Sync when save loads asynchronously (useState only captures initial value)
+  useEffect(() => {
+    if (save.tutorialDone && !tutDone) setTutDone(true)
+  }, [save.tutorialDone]) // eslint-disable-line
+
   useEffect(() => {
     console.log('[Tutorial] init — isDone:', isDone, 'stepIndex:', stepIndex)
   }, []) // eslint-disable-line
