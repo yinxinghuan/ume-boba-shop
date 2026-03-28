@@ -224,6 +224,11 @@ export default function UmeBoba() {
           {perSec >= 0.1 && (
             <div className="ub__per-sec">+{fmtUSD(perSec)}/秒</div>
           )}
+          {(save.prestige ?? 0) > 0 && (
+            <div className="ub__prestige-badge">
+              🌙 {save.prestige} · ×{pMult.toFixed(1)}
+            </div>
+          )}
         </div>
         <div className="ub__hud-right">
           <div className="ub__hud-btns">
