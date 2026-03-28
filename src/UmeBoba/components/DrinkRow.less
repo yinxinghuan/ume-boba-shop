@@ -2,8 +2,37 @@
 @pink:  #f8a4c8;
 @pink2: #e8709c;
 
-// Shared ticket notch mask (notches on left & right edges at mid-height)
-.ticket-mask() {
+// ── Hire ticket mask: scallops top+bottom, notches left+right ─────────────
+.hire-mask() {
+  @notch-r:    8px;
+  @notch-rp:   8.5px;
+  @scallop-r:  5px;
+  @scallop-rp: 5.5px;
+  @scallop-s:  12px;
+
+  -webkit-mask-image:
+    radial-gradient(circle at 0%   50%, transparent @notch-r,   black @notch-rp),
+    radial-gradient(circle at 100% 50%, transparent @notch-r,   black @notch-rp),
+    radial-gradient(circle at 50%  0%,  transparent @scallop-r, black @scallop-rp),
+    radial-gradient(circle at 50% 100%, transparent @scallop-r, black @scallop-rp);
+  -webkit-mask-size:     100% 100%, 100% 100%, @scallop-s @scallop-s, @scallop-s @scallop-s;
+  -webkit-mask-position: 0 0, 0 0, 0 0, 0 100%;
+  -webkit-mask-repeat:   no-repeat, no-repeat, repeat-x, repeat-x;
+  -webkit-mask-composite: destination-in, destination-in, destination-in;
+
+  mask-image:
+    radial-gradient(circle at 0%   50%, transparent @notch-r,   black @notch-rp),
+    radial-gradient(circle at 100% 50%, transparent @notch-r,   black @notch-rp),
+    radial-gradient(circle at 50%  0%,  transparent @scallop-r, black @scallop-rp),
+    radial-gradient(circle at 50% 100%, transparent @scallop-r, black @scallop-rp);
+  mask-size:     100% 100%, 100% 100%, @scallop-s @scallop-s, @scallop-s @scallop-s;
+  mask-position: 0 0, 0 0, 0 0, 0 100%;
+  mask-repeat:   no-repeat, no-repeat, repeat-x, repeat-x;
+  mask-composite: intersect, intersect, intersect;
+}
+
+// ── Buy ticket mask: notches left+right only ──────────────────────────────
+.notch-mask() {
   -webkit-mask-image:
     radial-gradient(circle at 0%   50%, transparent 8px, black 8.5px),
     radial-gradient(circle at 100% 50%, transparent 8px, black 8.5px);
@@ -161,7 +190,7 @@
     &--dim { color: rgba(0,0,0,0.55); font-weight: 800; }
   }
 
-  // ── Ticket column (right) ─────────────────────────────────────────────────
+  // ── Ticket column ─────────────────────────────────────────────────────────
   &__tickets {
     width: 160px;
     flex-shrink: 0;
@@ -169,87 +198,91 @@
     display: flex;
     flex-direction: row;
     align-items: stretch;
-    gap: 4px;
+    gap: 6px;
     padding: 8px 6px;
     border-left: 1px solid rgba(255,255,255,0.06);
   }
 
-  // ── Hire ticket (left) ────────────────────────────────────────────────────
+  // ── Hire ticket ───────────────────────────────────────────────────────────
+  // Layout: flex-column, character img absolute behind, labels on top
   &__hire {
     flex: 1;
+    position: relative;
+    overflow: hidden;
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    gap: 0;
     cursor: pointer;
     touch-action: none;
     -webkit-tap-highlight-color: transparent;
     background: rgba(255,255,255,0.06);
     color: rgba(255,255,255,0.3);
-    border-radius: 10px;
-    transition: background 0.12s, color 0.12s, transform 0.1s;
-    .ticket-mask();
+    transition: transform 0.1s;
+    .hire-mask();
 
+    // affordable: pink background
     &--on {
       background: @pink2;
-      color: rgba(0,0,0,0.8);
-      box-shadow: 0 4px 0 rgba(0,0,0,0.25);
+      color: rgba(0,0,0,0.82);
     }
-    &--on:active { transform: scale(0.93); }
+    &:active { transform: scale(0.93); }
 
-    // hired state: show character image instead of ticket
+    // hired: dark bg, character fills, no text, same stamp mask
     &--done {
       cursor: default;
-      overflow: hidden;
-      background: transparent;
-      padding: 0;
-      border-radius: 10px;
-      // no mask — let image fill freely
-      -webkit-mask-image: none;
-      mask-image: none;
+      background: rgba(0,0,0,0.5);
+      &:active { transform: none; }
     }
   }
 
+  // character image — absolute, fills the ticket (z-index 0, behind labels)
+  &__hire-char {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 110%;
+    bottom: -5%;
+    object-fit: contain;
+    object-position: bottom center;
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  // text labels sit above the character
   &__hire-label {
-    font-size: 12px;
+    position: relative;
+    z-index: 1;
+    font-size: 14px;
     font-weight: 900;
     text-align: center;
     padding: 0 4px;
-    line-height: 1.2;
+    letter-spacing: 0.3px;
   }
 
+  // horizontal dotted tear line (dots, not dashes)
   &__hire-tear {
-    width: 80%;
-    height: 1px;
+    position: relative;
+    z-index: 1;
+    width: 85%;
     margin: 5px 0;
-    background: repeating-linear-gradient(
-      90deg,
-      currentColor 0px, currentColor 3px,
-      transparent 3px, transparent 7px
-    );
-    opacity: 0.5;
+    border: none;
+    border-top: 3px dotted currentColor;
+    opacity: 0.6;
     flex-shrink: 0;
   }
 
   &__hire-cost {
-    font-size: 13px;
+    position: relative;
+    z-index: 1;
+    font-size: 15px;
     font-weight: 900;
     text-align: center;
     padding: 0 4px;
-    letter-spacing: -0.3px;
+    letter-spacing: -0.5px;
   }
 
-  &__hire-img {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-    object-position: center top;
-    pointer-events: none;
-    border-radius: 10px;
-  }
-
-  // ── Buy ticket (right) ────────────────────────────────────────────────────
+  // ── Buy ticket ────────────────────────────────────────────────────────────
   &__buy {
     flex: 1;
     display: flex;
@@ -262,7 +295,6 @@
     transition: transform 0.1s;
     padding: 0;
 
-    // when hire slot is absent, fill full width
     &--solo { flex: 1; }
 
     &-inner {
@@ -277,13 +309,13 @@
       color: rgba(255,255,255,0.25);
       box-shadow: 0 3px 0 rgba(0,0,0,0.3);
       transition: background 0.12s, color 0.12s, box-shadow 0.12s;
-      .ticket-mask();
+      .notch-mask();
     }
 
     &--on &-inner {
-      background: rgba(255,255,255,0.92);
-      color: rgba(0,0,0,0.75);
-      box-shadow: 0 4px 0 rgba(0,0,0,0.2);
+      background: rgba(255,255,255,0.93);
+      color: rgba(0,0,0,0.8);
+      box-shadow: 0 4px 0 rgba(0,0,0,0.15);
     }
 
     &:active { transform: scale(0.93); }
@@ -291,19 +323,19 @@
 
   &__buy-arrow {
     display: block;
-    font-size: 22px;
+    font-size: 26px;
     line-height: 1;
     font-weight: 900;
-    padding: 10px 0 6px;
+    padding: 12px 0 8px;
   }
 
   &__buy-tear {
-    width: 80%;
+    width: 82%;
     height: 1px;
     background: repeating-linear-gradient(
       90deg,
-      currentColor 0px, currentColor 3px,
-      transparent 3px, transparent 7px
+      currentColor 0px, currentColor 4px,
+      transparent 4px, transparent 8px
     );
     opacity: 0.5;
     flex-shrink: 0;
@@ -311,12 +343,12 @@
 
   &__buy-price {
     display: block;
-    font-size: 13px;
+    font-size: 15px;
     font-weight: 900;
-    padding: 6px 4px 10px;
+    padding: 8px 4px 12px;
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
-    letter-spacing: -0.3px;
+    letter-spacing: -0.5px;
   }
 }

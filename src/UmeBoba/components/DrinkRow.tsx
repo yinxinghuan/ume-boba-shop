@@ -54,12 +54,12 @@ export default function DrinkRow({
   def, dp, progress, canAffordBuy, canAffordManager,
   onTap, onBuy, onManager, rowRef, buyRef
 }: Props) {
-  const ready   = progress >= 1 && !dp.hasManager && dp.cycleStarted > 0
-  const waiting = dp.cycleStarted === 0 && dp.qty > 0 && !dp.hasManager
-  const income  = incomePerCycle(def, dp.qty)
-  const ms      = cycleMs(def, dp.qty)
+  const ready    = progress >= 1 && !dp.hasManager && dp.cycleStarted > 0
+  const waiting  = dp.cycleStarted === 0 && dp.qty > 0 && !dp.hasManager
+  const income   = incomePerCycle(def, dp.qty)
+  const ms       = cycleMs(def, dp.qty)
   const nextCost = buyCost(def, dp.qty)
-  const showHire = dp.qty > 0  // hire slot only visible once you have any qty
+  const showHire = dp.qty > 0
 
   return (
     <div
@@ -98,27 +98,30 @@ export default function DrinkRow({
       {/* ── Right: ticket column ── */}
       <div className="dr__tickets">
 
-        {/* Left ticket: hire staff (only once qty > 0) */}
+        {/* Left: hire ticket (stamp style) — only when qty > 0 */}
         {showHire && (
           dp.hasManager ? (
-            /* hired → show character image */
+            /* hired → character image only, no ticket */
             <div className="dr__hire dr__hire--done">
-              <img src={getManagerSprite(def.id)} alt="" draggable={false} className="dr__hire-img" />
+              <img src={getManagerSprite(def.id)} alt="" draggable={false} className="dr__hire-char" />
             </div>
           ) : (
-            /* not hired → hire ticket */
+            /* not hired → stamp ticket */
             <div
               className={`dr__hire ${canAffordManager ? 'dr__hire--on' : ''}`}
               onPointerDown={e => { e.stopPropagation(); onManager() }}
             >
-              <span className="dr__hire-label">招店员</span>
+              {canAffordManager && (
+                <img src={getManagerSprite(def.id)} alt="" draggable={false} className="dr__hire-char" />
+              )}
+              <span className="dr__hire-label">Employ</span>
               <div className="dr__hire-tear" />
               <span className="dr__hire-cost">{fmtUSD(def.managerCost)}</span>
             </div>
           )
         )}
 
-        {/* Right ticket: buy / upgrade */}
+        {/* Right: buy ticket (notch style) */}
         <button
           ref={buyRef}
           className={`dr__buy ${canAffordBuy ? 'dr__buy--on' : ''} ${!showHire ? 'dr__buy--solo' : ''}`}
