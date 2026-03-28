@@ -212,6 +212,7 @@ export default function UmeBoba() {
             dp={save.drinks[def.id]}
             progress={progress[def.id] ?? 0}
             canAffordBuy={save.coins >= buyCost(def, save.drinks[def.id]?.qty ?? 0)}
+            canAffordManager={save.coins >= def.managerCost}
             onTap={(x, y) => tapDrink(def.id, x, y)}
             onBuy={() => buyDrink(def.id)}
             onManager={() => hireManager(def.id)}

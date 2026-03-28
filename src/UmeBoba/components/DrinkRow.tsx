@@ -3,12 +3,12 @@ import type { DrinkDef, DrinkProgress } from '../types'
 import { buyCost, cycleMs, fmtUSD, fmtMs, incomePerCycle } from '../constants'
 import './DrinkRow.less'
 
-import imgPearl     from '../img/drink_pearl_milk_tea.png'
+import imgPearl      from '../img/drink_pearl_milk_tea.png'
 import imgWatermelon from '../img/drink_watermelon.png'
-import imgMango     from '../img/drink_mango.png'
-import imgLemon     from '../img/drink_lemon.png'
-import imgAvocado   from '../img/drink_avocado.png'
-import imgAngel     from '../img/drink_angel.png'
+import imgMango      from '../img/drink_mango.png'
+import imgLemon      from '../img/drink_lemon.png'
+import imgAvocado    from '../img/drink_avocado.png'
+import imgAngel      from '../img/drink_angel.png'
 
 const DRINK_IMGS: Record<string, string> = {
   pearl_milk_tea: imgPearl,
@@ -42,6 +42,7 @@ interface Props {
   dp: DrinkProgress
   progress: number
   canAffordBuy: boolean
+  canAffordManager: boolean
   onTap: (x: number, y: number) => void
   onBuy: () => void
   onManager: () => void
@@ -49,12 +50,16 @@ interface Props {
   buyRef?: React.RefObject<HTMLButtonElement>
 }
 
-export default function DrinkRow({ def, dp, progress, canAffordBuy, onTap, onBuy, onManager, rowRef, buyRef }: Props) {
-  const ready    = progress >= 1 && !dp.hasManager && dp.cycleStarted > 0
-  const waiting  = dp.cycleStarted === 0 && dp.qty > 0 && !dp.hasManager
-  const income   = incomePerCycle(def, dp.qty)
-  const ms       = cycleMs(def, dp.qty)
+export default function DrinkRow({
+  def, dp, progress, canAffordBuy, canAffordManager,
+  onTap, onBuy, onManager, rowRef, buyRef
+}: Props) {
+  const ready   = progress >= 1 && !dp.hasManager && dp.cycleStarted > 0
+  const waiting = dp.cycleStarted === 0 && dp.qty > 0 && !dp.hasManager
+  const income  = incomePerCycle(def, dp.qty)
+  const ms      = cycleMs(def, dp.qty)
   const nextCost = buyCost(def, dp.qty)
+  const showHire = dp.qty > 0  // hire slot only visible once you have any qty
 
   return (
     <div
@@ -67,12 +72,10 @@ export default function DrinkRow({ def, dp, progress, canAffordBuy, onTap, onBuy
       <div className="dr__icon">
         <img src={DRINK_IMGS[def.id]} alt={def.nameZh} draggable={false} className="dr__img" />
         {dp.qty > 0 && <div className="dr__qty">{dp.qty}</div>}
-        {dp.hasManager && <span className="dr__star">⚡</span>}
       </div>
 
       {/* ── Center ── */}
       <div className="dr__center">
-        {/* income + time */}
         <div className="dr__meta">
           {dp.qty > 0
             ? <span className="dr__income">{fmtUSD(income)}<em>/次</em></span>
@@ -80,11 +83,7 @@ export default function DrinkRow({ def, dp, progress, canAffordBuy, onTap, onBuy
           }
           {dp.qty > 0 && <span className="dr__time">{fmtMs(ms)}</span>}
         </div>
-
-        {/* name (when has qty, show below income) */}
         {dp.qty > 0 && <span className="dr__name">{def.nameZh}</span>}
-
-        {/* progress bar */}
         {dp.qty > 0 ? (
           <div className="dr__bar-track">
             <div className="dr__bar-fill" style={{ width: `${progress * 100}%`, background: def.color }} />
@@ -96,29 +95,33 @@ export default function DrinkRow({ def, dp, progress, canAffordBuy, onTap, onBuy
         )}
       </div>
 
-      {/* ── Tickets column (right) ── */}
+      {/* ── Right: ticket column ── */}
       <div className="dr__tickets">
-        {/* Hire staff ticket (top) */}
-        {!dp.hasManager && dp.qty > 0 && (
-          <div
-            className="dr__hire-ticket"
-            onPointerDown={e => { e.stopPropagation(); onManager() }}
-          >
-            <img
-              src={getManagerSprite(def.id)}
-              alt=""
-              draggable={false}
-              className="dr__hire-char"
-            />
-            <div className="dr__hire-tear" />
-            <span className="dr__hire-cost">{fmtUSD(def.managerCost)}</span>
-          </div>
+
+        {/* Left ticket: hire staff (only once qty > 0) */}
+        {showHire && (
+          dp.hasManager ? (
+            /* hired → show character image */
+            <div className="dr__hire dr__hire--done">
+              <img src={getManagerSprite(def.id)} alt="" draggable={false} className="dr__hire-img" />
+            </div>
+          ) : (
+            /* not hired → hire ticket */
+            <div
+              className={`dr__hire ${canAffordManager ? 'dr__hire--on' : ''}`}
+              onPointerDown={e => { e.stopPropagation(); onManager() }}
+            >
+              <span className="dr__hire-label">招店员</span>
+              <div className="dr__hire-tear" />
+              <span className="dr__hire-cost">{fmtUSD(def.managerCost)}</span>
+            </div>
+          )
         )}
 
-        {/* Buy ticket (bottom) */}
+        {/* Right ticket: buy / upgrade */}
         <button
           ref={buyRef}
-          className={`dr__buy ${canAffordBuy ? 'dr__buy--on' : ''}`}
+          className={`dr__buy ${canAffordBuy ? 'dr__buy--on' : ''} ${!showHire ? 'dr__buy--solo' : ''}`}
           onPointerDown={e => { e.stopPropagation(); onBuy() }}
         >
           <div className="dr__buy-inner">
@@ -127,6 +130,7 @@ export default function DrinkRow({ def, dp, progress, canAffordBuy, onTap, onBuy
             <span className="dr__buy-price">{fmtUSD(nextCost)}</span>
           </div>
         </button>
+
       </div>
     </div>
   )
