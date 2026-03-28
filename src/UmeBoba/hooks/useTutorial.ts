@@ -10,6 +10,8 @@ export function useTutorial(
 ) {
   const isDone = !!save.tutorialDone
     || (typeof localStorage !== 'undefined' && !!localStorage.getItem(TUTORIAL_DONE_KEY))
+    || save.totalEarned > 0   // legacy saves: if they've earned money, tutorial was done
+    || (save.prestige ?? 0) > 0
 
   const [stepIndex, setStepIndex] = useState(0)
   const [tutDone, setTutDone] = useState(isDone)
@@ -18,8 +20,9 @@ export function useTutorial(
 
   // Sync when save loads asynchronously (useState only captures initial value)
   useEffect(() => {
-    if (save.tutorialDone && !tutDone) setTutDone(true)
-  }, [save.tutorialDone]) // eslint-disable-line
+    const nowDone = !!save.tutorialDone || save.totalEarned > 0 || (save.prestige ?? 0) > 0
+    if (nowDone && !tutDone) setTutDone(true)
+  }, [save.tutorialDone, save.totalEarned, save.prestige]) // eslint-disable-line
 
   useEffect(() => {
     console.log('[Tutorial] init — isDone:', isDone, 'stepIndex:', stepIndex)
