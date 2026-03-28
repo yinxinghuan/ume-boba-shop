@@ -45,12 +45,7 @@
   position: relative;
 
   &--bought {
-    animation: dr-bought 0.45s ease-out forwards;
-    @keyframes dr-bought {
-      0%   { background: rgba(255,220,80,0.45); }
-      60%  { background: rgba(255,220,80,0.15); }
-      100% { background: transparent; }
-    }
+    // no full-row flash — buy button handles its own feedback
   }
 
   &--ready {
