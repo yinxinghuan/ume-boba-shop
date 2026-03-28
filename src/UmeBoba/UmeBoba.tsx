@@ -14,7 +14,7 @@ import TutorialLayer from './components/TutorialLayer'
 import Leaderboard from './components/Leaderboard'
 import ShopView from './components/ShopView'
 import HelpPanel from './components/HelpPanel'
-import { DRINKS, buyCost, fmt, fmtUSD, incomePerCycle, cycleMs, getShopLevel } from './constants'
+import { DRINKS, buyCost, fmt, fmtUSD, incomePerCycle, cycleMs, getShopLevel, prestigeGain, prestigeMultiplier, PRESTIGE_THRESHOLD } from './constants'
 import { playUnlock, isMuted, setMuted } from './utils/sounds'
 import type { GameSave } from './types'
 import imgBgShop from './img/bg_shop.png'
@@ -58,6 +58,7 @@ export default function UmeBoba() {
   const [showOffline, setShowOffline] = useState(false)
   const [showLb, setShowLb] = useState(false)
   const [showHelp, setShowHelp] = useState(false)
+  const [showPrestige, setShowPrestige] = useState(false)
   const [muted, setMutedState] = useState(isMuted())
 
   function toggleMute() {
@@ -95,6 +96,25 @@ export default function UmeBoba() {
 
   const shopLevel  = getShopLevel(save.totalEarned)
   const shopImages = useShopImage(save.totalEarned, aigramUser?.head_url ?? null, loaded)
+  const pMult      = prestigeMultiplier(save.prestige ?? 0)
+  const effectiveMult = shopLevel.multiplier * pMult
+
+  function doPrestige() {
+    const gain = prestigeGain(save.totalEarned)
+    const prevPrestige = save.prestige ?? 0
+    setSave(s => ({
+      ...s,
+      coins: 0,
+      totalEarned: 0,
+      prestige: prevPrestige + gain,
+      tutorialDone: true,
+      drinks: Object.fromEntries(
+        DRINKS.map(d => [d.id, { qty: d.id === 'pearl_milk_tea' ? 1 : 0, cycleStarted: 0, hasManager: false }])
+      ),
+      lastActive: Date.now(),
+    }))
+    setShowPrestige(false)
+  }
 
   const { guide, dismissGuide } = useGuide(save, loaded)
   const { tutStep, tutDone, advanceTut, skipTut } = useTutorial(
@@ -118,7 +138,7 @@ export default function UmeBoba() {
     const dp = save.drinks[def.id]
     if (!dp || dp.qty === 0 || !dp.hasManager) return sum
     const ms = cycleMs(def, dp.qty)
-    return sum + (incomePerCycle(def, dp.qty, shopLevel.multiplier) / ms * 1000)
+    return sum + (incomePerCycle(def, dp.qty, effectiveMult) / ms * 1000)
   }, 0)
 
   function collectOffline() {
@@ -232,6 +252,7 @@ export default function UmeBoba() {
             def={def}
             dp={save.drinks[def.id]}
             progress={progress[def.id] ?? 0}
+            shopMult={effectiveMult}
             canAffordBuy={save.coins >= buyCost(def, save.drinks[def.id]?.qty ?? 0)}
             canAffordManager={save.coins >= def.managerCost}
             onTap={(x, y) => tapDrink(def.id, x, y)}
@@ -252,6 +273,20 @@ export default function UmeBoba() {
             <div className="ub__locked-bar">
               <div className="ub__locked-fill" style={{ width: `${Math.min(save.totalEarned / nextDrink.unlockCost * 100, 100)}%` }} />
             </div>
+          </div>
+        )}
+
+        {/* ── Prestige row ─────────────────────────────────────────────── */}
+        {save.totalEarned >= PRESTIGE_THRESHOLD && (
+          <div className="ub__prestige-row" onPointerDown={() => setShowPrestige(true)}>
+            <span className="ub__prestige-icon">🌙</span>
+            <div className="ub__prestige-text">
+              <div className="ub__prestige-title">月球转生</div>
+              <div className="ub__prestige-sub">
+                重置获得 +{prestigeGain(save.totalEarned)} 结晶 · 当前 {save.prestige ?? 0} 🌙
+              </div>
+            </div>
+            <span className="ub__prestige-arrow">›</span>
           </div>
         )}
 
@@ -293,6 +328,27 @@ export default function UmeBoba() {
 
       {/* ── Help panel ───────────────────────────────────────────────── */}
       {showHelp && <HelpPanel onClose={() => setShowHelp(false)} />}
+
+      {/* ── Prestige modal ───────────────────────────────────────────── */}
+      {showPrestige && (
+        <div className="ub__overlay" onPointerDown={() => setShowPrestige(false)}>
+          <div className="ub__modal" onPointerDown={e => e.stopPropagation()}>
+            <div className="ub__modal-icon">🌙</div>
+            <div className="ub__modal-title">月球转生</div>
+            <div className="ub__modal-body">
+              重置所有饮品和金币<br />
+              获得 <span className="ub__modal-coins">+{prestigeGain(save.totalEarned)} 🌙 结晶</span>
+            </div>
+            <div className="ub__modal-body" style={{ fontSize: 13, opacity: 0.7 }}>
+              当前结晶：{save.prestige ?? 0} 🌙<br />
+              转生后结晶：{(save.prestige ?? 0) + prestigeGain(save.totalEarned)} 🌙<br />
+              全局收益倍率：×{prestigeMultiplier((save.prestige ?? 0) + prestigeGain(save.totalEarned)).toFixed(1)}
+            </div>
+            <button className="ub__modal-btn" onPointerDown={doPrestige}>确认转生</button>
+            <button className="ub__modal-btn" style={{ background: 'rgba(255,255,255,0.1)', boxShadow: 'none', marginTop: 0 }} onPointerDown={() => setShowPrestige(false)}>取消</button>
+          </div>
+        </div>
+      )}
 
       {/* ── Offline modal ────────────────────────────────────────────── */}
       {showOffline && (

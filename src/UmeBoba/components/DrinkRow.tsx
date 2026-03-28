@@ -43,6 +43,7 @@ interface Props {
   def: DrinkDef
   dp: DrinkProgress
   progress: number
+  shopMult: number
   canAffordBuy: boolean
   canAffordManager: boolean
   onTap: (x: number, y: number) => void
@@ -55,12 +56,12 @@ interface Props {
 interface Particle { id: number; x: number; y: number; tx: number; ty: number; rot: number; dur: number }
 
 export default function DrinkRow({
-  def, dp, progress, canAffordBuy, canAffordManager,
+  def, dp, progress, shopMult, canAffordBuy, canAffordManager,
   onTap, onBuy, onManager, rowRef, buyRef
 }: Props) {
   const ready    = progress >= 1 && !dp.hasManager && dp.cycleStarted > 0
   const waiting  = dp.cycleStarted === 0 && dp.qty > 0 && !dp.hasManager
-  const income   = incomePerCycle(def, dp.qty)
+  const income   = incomePerCycle(def, dp.qty, shopMult)
   const ms       = cycleMs(def, dp.qty)
   const nextCost = buyCost(def, dp.qty)
   const showHire = dp.qty > 0

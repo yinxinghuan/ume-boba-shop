@@ -263,6 +263,58 @@
     transition: width 0.5s;
   }
 
+  // ── Prestige row ──────────────────────────────────────────────────────────
+  &__prestige-row {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 16px 14px;
+    background: linear-gradient(135deg, rgba(180,120,255,0.12), rgba(255,200,80,0.08));
+    border-top: 1px solid rgba(180,120,255,0.2);
+    cursor: pointer;
+    touch-action: pan-y;
+    -webkit-tap-highlight-color: transparent;
+    animation: ub-prestige-glow 2s ease-in-out infinite alternate;
+
+    @keyframes ub-prestige-glow {
+      from { background: linear-gradient(135deg, rgba(180,120,255,0.10), rgba(255,200,80,0.06)); }
+      to   { background: linear-gradient(135deg, rgba(180,120,255,0.22), rgba(255,200,80,0.14)); }
+    }
+
+    &:active { opacity: 0.75; }
+  }
+
+  &__prestige-icon {
+    font-size: 32px;
+    flex-shrink: 0;
+    filter: drop-shadow(0 0 8px rgba(200,160,255,0.8));
+  }
+
+  &__prestige-text {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 3px;
+  }
+
+  &__prestige-title {
+    font-size: 15px;
+    font-weight: 900;
+    color: #d4aaff;
+    letter-spacing: 0.02em;
+  }
+
+  &__prestige-sub {
+    font-size: 11.5px;
+    color: rgba(255,255,255,0.5);
+  }
+
+  &__prestige-arrow {
+    font-size: 22px;
+    color: rgba(200,160,255,0.6);
+    flex-shrink: 0;
+  }
+
   // ── Float numbers ─────────────────────────────────────────────────────────
   &__float {
     position: fixed;

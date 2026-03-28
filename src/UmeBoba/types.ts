@@ -32,4 +32,5 @@ export interface GameSave {
   drinks: Record<string, DrinkProgress>
   lastActive: number
   tutorialDone?: boolean
+  prestige?: number       // total moon crystals accumulated across resets
 }

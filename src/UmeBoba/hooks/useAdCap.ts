@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useRef, useState } from 'react'
 import type { DrinkProgress, GameSave } from '../types'
-import { DRINKS, buyCost, cycleMs, incomePerCycle, getShopLevel } from '../constants'
+import { DRINKS, buyCost, cycleMs, incomePerCycle, getShopLevel, prestigeMultiplier, prestigeGain } from '../constants'
 import { playCollect, playBuy, playManager, playStart } from '../utils/sounds'
 
 // ── Default save ──────────────────────────────────────────────────────────────
@@ -18,13 +18,14 @@ export function calcOffline(save: GameSave): number {
   const elapsed = Date.now() - save.lastActive
   if (elapsed < 5000) return 0
   const shopMult = getShopLevel(save.totalEarned).multiplier
+  const pMult = prestigeMultiplier(save.prestige ?? 0)
   let earned = 0
   for (const def of DRINKS) {
     const dp = save.drinks[def.id]
     if (!dp || dp.qty === 0 || !dp.hasManager) continue
     const ms = cycleMs(def, dp.qty)
     const cycles = Math.floor(elapsed / ms)
-    earned += cycles * incomePerCycle(def, dp.qty, shopMult)
+    earned += cycles * incomePerCycle(def, dp.qty, shopMult * pMult)
   }
   return Math.floor(earned * 0.6)
 }
@@ -79,7 +80,8 @@ export function useAdCap(
 
         if (pct >= 1 && dp.hasManager && activeRef.current) {
           const shopMult = getShopLevel(saveRef.current.totalEarned).multiplier
-          earned[def.id] = incomePerCycle(def, dp.qty, shopMult)
+          const pMult = prestigeMultiplier(saveRef.current.prestige ?? 0)
+          earned[def.id] = incomePerCycle(def, dp.qty, shopMult * pMult)
         }
       }
 
@@ -130,7 +132,8 @@ export function useAdCap(
       if (now - dp.cycleStarted < ms) return s
 
       const shopMult = getShopLevel(s.totalEarned).multiplier
-      const earned = incomePerCycle(def, dp.qty, shopMult)
+      const pMult = prestigeMultiplier(s.prestige ?? 0)
+      const earned = incomePerCycle(def, dp.qty, shopMult * pMult)
       playCollect(earned)
 
       const id = crypto.randomUUID()
