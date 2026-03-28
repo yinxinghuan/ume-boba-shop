@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import type { TutorialStep } from '../tutorial'
 import type { GuideLine } from '../guideLines'
 import './TutorialLayer.less'
@@ -15,7 +15,6 @@ interface Props {
   step: TutorialStep | null
   onAdvance: () => void
   onSkip: () => void
-  // rect of the first drink row element (for highlight positioning)
   drinkRowRect: DOMRect | null
   buyBtnRect: DOMRect | null
 }
@@ -25,7 +24,6 @@ export default function TutorialLayer({ step, onAdvance, onSkip, drinkRowRect, b
   const [displayedDialog, setDisplayedDialog] = useState<GuideLine | null>(null)
 
   useEffect(() => {
-    console.log('[Tutorial] step:', step?.kind, step)
     if (!step) { setVisible(false); return }
     if (step.kind === 'dialog' && step.dialog) {
       setDisplayedDialog(step.dialog)
@@ -37,10 +35,10 @@ export default function TutorialLayer({ step, onAdvance, onSkip, drinkRowRect, b
 
   if (!step) return null
 
-  const isDialog     = step.kind === 'dialog'
-  const isHighlight  = step.kind === 'wait_tap_drink' || step.kind === 'wait_collect'
+  const isDialog       = step.kind === 'dialog'
+  const isHighlight    = step.kind === 'wait_tap_drink' || step.kind === 'wait_collect'
   const isBuyHighlight = step.kind === 'wait_buy'
-  const targetRect   = isBuyHighlight ? buyBtnRect : drinkRowRect
+  const targetRect     = isBuyHighlight ? buyBtnRect : drinkRowRect
 
   return (
     <div className={`tut ${visible && isDialog ? 'tut--dialog-in' : ''}`}>
@@ -50,15 +48,28 @@ export default function TutorialLayer({ step, onAdvance, onSkip, drinkRowRect, b
       {/* Skip button always visible */}
       <button className="tut__skip" onPointerDown={onSkip}>跳过引导</button>
 
-      {/* Arrow highlight for action steps */}
+      {/* Spotlight + arrow for action steps */}
       {(isHighlight || isBuyHighlight) && targetRect && (
-        <ArrowHint rect={targetRect} text={step.arrowText ?? '点这里！'} />
+        <>
+          <div
+            className="tut__spotlight"
+            style={{
+              top:    targetRect.top,
+              left:   targetRect.left,
+              width:  targetRect.width,
+              height: targetRect.height,
+            }}
+          />
+          <ArrowHint rect={targetRect} text={step.arrowText ?? '点这里！'} />
+        </>
       )}
 
       {/* Dialog popup */}
       {isDialog && displayedDialog && (
-        <div className={`tut__panel ${visible ? 'tut__panel--in' : ''}`}
-             onPointerDown={onAdvance}>
+        <div
+          className={`tut__panel ${visible ? 'tut__panel--in' : ''}`}
+          onPointerDown={onAdvance}
+        >
           <img
             src={getSprite(displayedDialog.char, displayedDialog.expr)}
             alt={displayedDialog.char}
@@ -78,14 +89,14 @@ export default function TutorialLayer({ step, onAdvance, onSkip, drinkRowRect, b
 }
 
 function ArrowHint({ rect, text }: { rect: DOMRect; text: string }) {
-  // Position arrow below the target element
-  const arrowTop  = rect.bottom + 8
-  const arrowLeft = rect.left + rect.width / 2
+  // Position arrow above the target element, pointing down at it
+  const arrowLeft   = rect.left + rect.width / 2
+  const arrowBottom = window.innerHeight - rect.top + 8
 
   return (
-    <div className="tut__arrow" style={{ top: arrowTop, left: arrowLeft }}>
-      <div className="tut__arrow-icon">▲</div>
+    <div className="tut__arrow" style={{ bottom: arrowBottom, left: arrowLeft }}>
       <div className="tut__arrow-label">{text}</div>
+      <div className="tut__arrow-icon">▼</div>
     </div>
   )
 }

@@ -18,10 +18,10 @@
     border-bottom: none;
   }
 
-  // ── Cup wrapper: 75% width, square, overflow visible for float headroom ───
+  // ── Cup wrapper ────────────────────────────────────────────────────────────
   &__cup-wrap {
     position: relative;
-    width: 55%;
+    width: 38%;
     aspect-ratio: 1 / 1;
     overflow: visible;
   }
@@ -31,17 +31,46 @@
     height: 100%;
     object-fit: contain;
     pointer-events: none;
-    filter: drop-shadow(0 12px 28px rgba(0,0,0,0.5));
     position: relative;
     z-index: 1;
-    animation: sv-float-idle 3s ease-in-out infinite alternate;
+    // Level 1: static, no animation
+    filter: drop-shadow(0 6px 12px rgba(0,0,0,0.4));
+
+    // Level 2–3: gentle drift
+    [data-lv="2"] &,
+    [data-lv="3"] & {
+      animation: sv-float-gentle 4s ease-in-out infinite alternate;
+      filter: drop-shadow(0 8px 18px rgba(0,0,0,0.45));
+    }
+
+    // Level 4–5: normal float
+    [data-lv="4"] &,
+    [data-lv="5"] & {
+      animation: sv-float-idle 3s ease-in-out infinite alternate;
+      filter: drop-shadow(0 10px 24px rgba(0,0,0,0.5));
+    }
+
+    // Level 6: float + subtle scale wobble
+    [data-lv="6"] & {
+      animation: sv-float-max 2.5s ease-in-out infinite alternate;
+      filter: drop-shadow(0 12px 30px rgba(255,20,147,0.35)) drop-shadow(0 0 20px rgba(255,20,147,0.2));
+    }
+
+    @keyframes sv-float-gentle {
+      from { transform: translateY(0); }
+      to   { transform: translateY(-6px); }
+    }
     @keyframes sv-float-idle {
       from { transform: translateY(0); }
-      to   { transform: translateY(-12px); }
+      to   { transform: translateY(-10px); }
+    }
+    @keyframes sv-float-max {
+      from { transform: translateY(0)    scale(1); }
+      to   { transform: translateY(-12px) scale(1.03); }
     }
   }
 
-  // Glow at base of cup
+  // Glow at base — hidden at lv1, grows with level
   &__glow {
     position: absolute;
     bottom: 2%;
@@ -49,17 +78,46 @@
     transform: translateX(-50%);
     width: 60%;
     height: 14%;
-    background: radial-gradient(ellipse,
-      rgba(255, 20, 147, calc(var(--glow, 0) * 0.55)) 0%,
-      rgba(255, 179, 212, calc(var(--glow, 0) * 0.3)) 55%,
-      transparent 80%
-    );
     pointer-events: none;
     z-index: 0;
-    animation: sv-glow-pulse 2s ease-in-out infinite alternate;
+
+    // Level 1: invisible
+    [data-lv="1"] & { display: none; }
+
+    // Level 2–3: dim static glow
+    [data-lv="2"] &,
+    [data-lv="3"] & {
+      background: radial-gradient(ellipse,
+        rgba(255, 20, 147, calc(var(--glow, 0) * 0.25)) 0%,
+        transparent 75%
+      );
+    }
+
+    // Level 4–5: animated glow
+    [data-lv="4"] &,
+    [data-lv="5"] & {
+      background: radial-gradient(ellipse,
+        rgba(255, 20, 147, calc(var(--glow, 0) * 0.45)) 0%,
+        rgba(255, 179, 212, calc(var(--glow, 0) * 0.2)) 55%,
+        transparent 80%
+      );
+      animation: sv-glow-pulse 2.5s ease-in-out infinite alternate;
+    }
+
+    // Level 6: bright pulsing glow
+    [data-lv="6"] & {
+      width: 80%;
+      background: radial-gradient(ellipse,
+        rgba(255, 20, 147, calc(var(--glow, 0) * 0.6)) 0%,
+        rgba(255, 179, 212, calc(var(--glow, 0) * 0.35)) 55%,
+        transparent 80%
+      );
+      animation: sv-glow-pulse 1.8s ease-in-out infinite alternate;
+    }
+
     @keyframes sv-glow-pulse {
-      from { opacity: 0.6; transform: translateX(-50%) scaleX(0.9); }
-      to   { opacity: 1;   transform: translateX(-50%) scaleX(1.1); }
+      from { opacity: 0.6; transform: translateX(-50%) scaleX(0.85); }
+      to   { opacity: 1;   transform: translateX(-50%) scaleX(1.15); }
     }
   }
 

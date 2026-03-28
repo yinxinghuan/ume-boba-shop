@@ -72,7 +72,7 @@ export default function ShopView({ totalEarned, perSec, currentImage }: Props) {
 
   return (
     <div className="sv">
-      <div className="sv__stage" style={{ '--glow': glowAlpha } as React.CSSProperties}>
+      <div className="sv__stage" data-lv={shopLevel.level} style={{ '--glow': glowAlpha } as React.CSSProperties}>
 
         {/* Cup image — square, centered */}
         <div className="sv__cup-wrap">

@@ -1,6 +1,7 @@
-import React from 'react'
+import React, { useState } from 'react'
 import type { DrinkDef, DrinkProgress } from '../types'
 import { buyCost, cycleMs, fmtUSD, fmtMs, incomePerCycle } from '../constants'
+import { t } from '../i18n'
 import './DrinkRow.less'
 
 import imgPearl      from '../img/drink_pearl_milk_tea.png'
@@ -32,9 +33,10 @@ const MANAGER_CHARS: Record<string, string> = {
   angel:          'yoome',
 }
 
-function getManagerSprite(drinkId: string): string {
+function getManagerSprite(drinkId: string, done = false): string {
   const char = MANAGER_CHARS[drinkId] ?? 'bubblepearl'
-  return GUIDE_SPRITES[`../img/guides/${char}_happy.png`] ?? ''
+  const expr = done ? 'surprised' : 'happy'
+  return GUIDE_SPRITES[`../img/guides/${char}_${expr}.png`] ?? ''
 }
 
 interface Props {
@@ -50,6 +52,8 @@ interface Props {
   buyRef?: React.RefObject<HTMLButtonElement>
 }
 
+interface Particle { id: number; x: number; y: number; tx: number; ty: number; rot: number; dur: number }
+
 export default function DrinkRow({
   def, dp, progress, canAffordBuy, canAffordManager,
   onTap, onBuy, onManager, rowRef, buyRef
@@ -61,17 +65,41 @@ export default function DrinkRow({
   const nextCost = buyCost(def, dp.qty)
   const showHire = dp.qty > 0
 
+  const [particles, setParticles] = useState<Particle[]>([])
+  const [buyFlash, setBuyFlash] = useState(false)
+
+  function handleBuyPress(e: React.PointerEvent<HTMLButtonElement>) {
+    e.stopPropagation()
+    onBuy()
+    const rect = e.currentTarget.getBoundingClientRect()
+    const cx = rect.left + rect.width / 2
+    const cy = rect.top + rect.height / 2
+    const newP: Particle[] = Array.from({ length: 7 }, (_, i) => ({
+      id:  Date.now() + i,
+      x:   cx + (Math.random() - 0.5) * 24,   // slight horizontal spread at origin
+      y:   cy - 20,
+      tx:  (Math.random() - 0.5) * 50,         // mild horizontal drift while falling
+      ty:  60 + Math.random() * 80,            // always fall downward, varying distance
+      rot: (Math.random() - 0.5) * 360,
+      dur: 0.45 + Math.random() * 0.45,        // 0.45 – 0.9 s, each at its own speed
+    }))
+    setParticles(newP)
+    setTimeout(() => setParticles([]), 900)
+    setBuyFlash(true)
+    setTimeout(() => setBuyFlash(false), 500)
+  }
+
   return (
     <div
       ref={rowRef}
-      className={`dr ${ready ? 'dr--ready' : ''} ${waiting ? 'dr--waiting' : ''}`}
+      className={`dr ${ready ? 'dr--ready' : ''} ${waiting ? 'dr--waiting' : ''} ${buyFlash ? 'dr--bought' : ''}`}
       style={{ '--accent': def.color } as React.CSSProperties}
       onPointerDown={e => { if (ready || waiting) onTap(e.clientX, e.clientY) }}
     >
       {/* ── Icon ── */}
       <div className="dr__icon">
         <img src={DRINK_IMGS[def.id]} alt={def.nameZh} draggable={false} className="dr__img" />
-        {dp.qty > 0 && <div className="dr__qty">{dp.qty}</div>}
+        {dp.qty > 0 && <div key={dp.qty} className="dr__qty">{dp.qty}</div>}
       </div>
 
       {/* ── Center ── */}
@@ -81,9 +109,9 @@ export default function DrinkRow({
             ? <span className="dr__income">{fmtUSD(income)}<em>/次</em></span>
             : <span className="dr__name">{def.nameZh}</span>
           }
+          {dp.qty > 0 && <span className="dr__name dr__name--meta">{def.nameZh}</span>}
           {dp.qty > 0 && <span className="dr__time">{fmtMs(ms)}</span>}
         </div>
-        {dp.qty > 0 && <span className="dr__name">{def.nameZh}</span>}
         {dp.qty > 0 ? (
           <div className="dr__bar-track">
             <div className="dr__bar-fill" style={{ width: `${progress * 100}%`, background: def.color }} />
@@ -103,7 +131,7 @@ export default function DrinkRow({
           dp.hasManager ? (
             /* hired → character image only, no ticket */
             <div className="dr__hire dr__hire--done">
-              <img src={getManagerSprite(def.id)} alt="" draggable={false} className="dr__hire-char" />
+              <img src={getManagerSprite(def.id, true)} alt="" draggable={false} className="dr__hire-char" />
             </div>
           ) : (
             /* not hired → stamp ticket */
@@ -114,7 +142,7 @@ export default function DrinkRow({
               {canAffordManager && (
                 <img src={getManagerSprite(def.id)} alt="" draggable={false} className="dr__hire-char" />
               )}
-              <span className="dr__hire-label">Employ</span>
+              <span className="dr__hire-label">{t('employ')}</span>
               <span className="dr__hire-cost">{fmtUSD(def.managerCost)}</span>
             </div>
           )
@@ -124,16 +152,31 @@ export default function DrinkRow({
         <button
           ref={buyRef}
           className={`dr__buy ${canAffordBuy ? 'dr__buy--on' : ''} ${!showHire ? 'dr__buy--solo' : ''}`}
-          onPointerDown={e => { e.stopPropagation(); onBuy() }}
+          onPointerDown={handleBuyPress}
         >
-          <div className="dr__buy-inner">
-            <span className="dr__buy-arrow">↑</span>
+          <div className={`dr__buy-inner ${dp.qty === 0 ? 'dr__buy-inner--unlock' : ''}`}>
+            {dp.qty === 0 ? (
+              <span className="dr__buy-label">{t('research')}</span>
+            ) : (
+              <span className="dr__buy-arrow" />
+            )}
             <div className="dr__buy-tear" />
             <span className="dr__buy-price">{fmtUSD(nextCost)}</span>
           </div>
         </button>
 
       </div>
+      {/* ── Money scatter particles ── */}
+      {particles.map(p => (
+        <div
+          key={p.id}
+          className="dr__money-particle"
+          style={{
+            left: p.x, top: p.y,
+            '--tx': `${p.tx}px`, '--ty': `${p.ty}px`, '--rot': `${p.rot}deg`, '--dur': `${p.dur}s`,
+          } as React.CSSProperties}
+        >💵</div>
+      ))}
     </div>
   )
 }

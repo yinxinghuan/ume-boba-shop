@@ -4,10 +4,10 @@ import type { DrinkDef, ShopLevel } from './types'
 export const SHOP_LEVELS: ShopLevel[] = [
   { level: 1, nameZh: '路边小摊',       threshold: 0,         multiplier: 1,    unlockDrinkId: 'pearl_milk_tea' },
   { level: 2, nameZh: '小奶茶铺',       threshold: 500,       multiplier: 1.5,  unlockDrinkId: 'watermelon'     },
-  { level: 3, nameZh: '人气茶饮',       threshold: 5_000,     multiplier: 2,    unlockDrinkId: 'mango'          },
-  { level: 4, nameZh: '网红奶茶店',     threshold: 30_000,    multiplier: 3,    unlockDrinkId: 'lemon'          },
-  { level: 5, nameZh: '连锁品牌',       threshold: 150_000,   multiplier: 5,    unlockDrinkId: 'avocado'        },
-  { level: 6, nameZh: 'UMe California', threshold: 800_000,   multiplier: 10,   unlockDrinkId: 'angel'          },
+  { level: 3, nameZh: '城市旗舰店',     threshold: 5_000,     multiplier: 2,    unlockDrinkId: 'mango'          },
+  { level: 4, nameZh: '跨国连锁集团',   threshold: 30_000,    multiplier: 3,    unlockDrinkId: 'lemon'          },
+  { level: 5, nameZh: '星际奶茶公司',   threshold: 150_000,   multiplier: 5,    unlockDrinkId: 'avocado'        },
+  { level: 6, nameZh: '月球旗舰站',     threshold: 800_000,   multiplier: 10,   unlockDrinkId: 'angel'          },
 ]
 
 export function getShopLevel(totalEarned: number): ShopLevel {

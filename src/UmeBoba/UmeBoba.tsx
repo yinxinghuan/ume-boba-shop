@@ -13,8 +13,9 @@ import GuidePopup from './components/GuidePopup'
 import TutorialLayer from './components/TutorialLayer'
 import Leaderboard from './components/Leaderboard'
 import ShopView from './components/ShopView'
+import HelpPanel from './components/HelpPanel'
 import { DRINKS, buyCost, fmt, fmtUSD, incomePerCycle, cycleMs, getShopLevel } from './constants'
-import { playUnlock } from './utils/sounds'
+import { playUnlock, isMuted, setMuted } from './utils/sounds'
 import type { GameSave } from './types'
 import imgBgShop from './img/bg_shop.png'
 import imgUme from './img/ume_counter.png'
@@ -25,6 +26,9 @@ import imgDrinkMango      from './img/drink_mango.png'
 import imgDrinkLemon      from './img/drink_lemon.png'
 import imgDrinkAvocado    from './img/drink_avocado.png'
 import imgDrinkAngel      from './img/drink_angel.png'
+import imgIconSound from './img/icon_sound.png'
+import imgIconMute  from './img/icon_mute.png'
+import imgIconHelp  from './img/icon_help.png'
 import './UmeBoba.less'
 
 const DRINK_IMGS: Record<string, string> = {
@@ -53,6 +57,14 @@ export default function UmeBoba() {
   const [offlineCoins, setOfflineCoins] = useState(0)
   const [showOffline, setShowOffline] = useState(false)
   const [showLb, setShowLb] = useState(false)
+  const [showHelp, setShowHelp] = useState(false)
+  const [muted, setMutedState] = useState(isMuted())
+
+  function toggleMute() {
+    const next = !muted
+    setMuted(next)
+    setMutedState(next)
+  }
   const loaded = screen !== 'splash'
 
   // Refs for tutorial highlight positioning
@@ -169,7 +181,6 @@ export default function UmeBoba() {
 
   return (
     <div className="ub">
-      <img src={imgBgShop} alt="" draggable={false} className="ub__bg" />
 
       {/* ── Top HUD ─────────────────────────────────────────────────── */}
       <div className="ub__hud">
@@ -191,8 +202,14 @@ export default function UmeBoba() {
           )}
         </div>
         <div className="ub__hud-right">
-          <img src={imgLogo} alt="UMe California" draggable={false} className="ub__logo" />
-          <button className="ub__lb-btn" onPointerDown={() => setShowLb(true)}>🏆</button>
+          <div className="ub__hud-btns">
+            <button className={`ub__icon-btn ub__icon-btn--sound ${muted ? 'ub__icon-btn--muted' : ''}`} onPointerDown={toggleMute}>
+              <span className="ub__sound-icon" />
+            </button>
+            <button className="ub__icon-btn ub__icon-btn--help" onPointerDown={() => setShowHelp(true)}>
+              <span className="ub__help-icon" />
+            </button>
+          </div>
         </div>
       </div>
 
@@ -269,6 +286,9 @@ export default function UmeBoba() {
           fetchFriends={fetchFriendsLeaderboard}
         />
       )}
+
+      {/* ── Help panel ───────────────────────────────────────────────── */}
+      {showHelp && <HelpPanel onClose={() => setShowHelp(false)} />}
 
       {/* ── Offline modal ────────────────────────────────────────────── */}
       {showOffline && (

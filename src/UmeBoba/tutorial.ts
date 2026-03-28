@@ -27,7 +27,7 @@ export const TUTORIAL_STEPS: TutorialStep[] = [
     kind: 'dialog',
     dialog: {
       char: 'yoome', expr: 'normal',
-      lines: ['看到这杯珍珠奶茶了吗？', '点一下它，就开始做奶茶！', '→ 试试点一下吧！'],
+      lines: ['看到下面这行珍珠奶茶了吗？', '点一下它，进度条就开始走！', '→ 试试点一下吧！'],
     },
   },
   {
@@ -39,7 +39,7 @@ export const TUTORIAL_STEPS: TutorialStep[] = [
     kind: 'dialog',
     dialog: {
       char: 'yoome', expr: 'normal',
-      lines: ['好！进度条开始走了～', '等它走到头，', '再点一次就能收美元！'],
+      lines: ['进度条开始走了！', '等它走满变成金色，', '再点一次就能收美元！'],
     },
   },
   {
@@ -49,7 +49,7 @@ export const TUTORIAL_STEPS: TutorialStep[] = [
     kind: 'dialog',
     dialog: {
       char: 'yoome', expr: 'surprised',
-      lines: ['进度条满了！', '快点一下珍珠奶茶，', '把美元收起来！'],
+      lines: ['进度条满了！✨', '快点一下这行，', '把美元收起来！'],
     },
   },
   {
@@ -68,7 +68,7 @@ export const TUTORIAL_STEPS: TutorialStep[] = [
     kind: 'dialog',
     dialog: {
       char: 'melonmick', expr: 'normal',
-      lines: ['嘿！看右边那个按钮！', '买更多杯数，每轮收益更高，', '速度也会更快！来买一杯！'],
+      lines: ['嘿！看右边的升级票！', '买更多杯数，每轮收益越高，', '速度也越快！来买一张！'],
     },
   },
   {
@@ -80,14 +80,14 @@ export const TUTORIAL_STEPS: TutorialStep[] = [
     kind: 'dialog',
     dialog: {
       char: 'melonmick', expr: 'happy',
-      lines: ['买了！看进度条是不是快了一点？', '数量越多 → 收益越高+速度越快！', '这是最重要的秘诀！'],
+      lines: ['买了！进度条是不是快了一点？', '数量越多 → 收益越高、速度越快！', '这是最重要的秘诀！'],
     },
   },
   {
     kind: 'dialog',
     dialog: {
       char: 'lemonshark', expr: 'normal',
-      lines: ['最后一招——招店员！', '看饮品下面的小字"招店员"，', '雇了之后自动收，关掉游戏也赚钱！'],
+      lines: ['最后一招——招店员！', '看升级票左边的招聘票，', '雇了之后自动收，关掉游戏也赚钱！'],
     },
   },
   {

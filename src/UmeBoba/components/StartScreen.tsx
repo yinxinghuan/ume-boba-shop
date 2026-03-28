@@ -1,6 +1,5 @@
 import React, { useState } from 'react'
-import imgPoster from '../img/poster.png'
-import imgUme    from '../img/ume_counter.png'
+import imgCup from '../img/shops/level1.png'
 import { fmt } from '../constants'
 import Leaderboard from './Leaderboard'
 import type { LeaderboardEntry } from '../hooks/useGameScore'
@@ -16,50 +15,58 @@ interface Props {
   fetchFriends: () => Promise<LeaderboardEntry[]>
 }
 
-export default function StartScreen({
-  playerName, playerAvatar, bestScore,
-  isInAigram, onPlay, fetchGlobal, fetchFriends,
-}: Props) {
+export default function StartScreen({ playerName, playerAvatar, bestScore, isInAigram, onPlay, fetchGlobal, fetchFriends }: Props) {
   const [showLb, setShowLb] = useState(false)
-
   return (
     <div className="ss">
+      {/* Subtle radial glow */}
+      <div className="ss__glow" />
 
-      {/* Blurred background */}
-      <div className="ss__bg" style={{ backgroundImage: `url(${imgPoster})` }} />
-
-      {/* Poster cover art */}
-      <div className="ss__hero">
-        <img src={imgPoster} alt="BOBA RUSH" draggable={false} className="ss__poster" />
+      {/* Title */}
+      <div className="ss__title-wrap">
+        <div className="ss__title">BOBA RUSH</div>
+        <div className="ss__subtitle">TAP TO BREW</div>
       </div>
 
-      {/* Bottom panel */}
-      <div className="ss__panel">
-        {/* Player row */}
-        <div className="ss__player">
-          <img
-            src={playerAvatar ?? imgUme}
-            alt="" draggable={false}
-            className="ss__avatar"
-          />
-          <div className="ss__player-info">
-            <div className="ss__name">{playerName ?? 'UMe 奶茶师'}</div>
-            {bestScore > 0 && (
-              <div className="ss__best">💰 最高收入 {fmt(bestScore)}</div>
-            )}
+      {/* Floating poster logo */}
+      <div className="ss__cup-wrap">
+        <img src={imgCup} alt="Boba Rush" draggable={false} className="ss__poster" />
+        <div className="ss__cup-shadow" />
+      </div>
+
+      {/* Decorative dots */}
+      <div className="ss__dots">
+        {'✦✦✦'.split('').map((c, i) => (
+          <span key={i} className="ss__dot" style={{ animationDelay: `${i * 0.3}s` }}>{c}</span>
+        ))}
+      </div>
+
+      {/* Bottom area */}
+      <div className="ss__bottom">
+        {playerName && (
+          <div className="ss__greeting">
+            {playerAvatar && <img src={playerAvatar} alt="" draggable={false} className="ss__avatar" />}
+            <span>{playerName}</span>
+            {bestScore > 0 && <span className="ss__best">· 最高 {fmt(bestScore)}</span>}
           </div>
-          <button className="ss__lb-icon" onPointerDown={() => setShowLb(true)}>🏆</button>
+        )}
+
+        {/* Ticket-style play button */}
+        <div className="ss__ticket-wrap" onPointerDown={onPlay}>
+          <div className="ss__ticket">
+            <span className="ss__ticket-label">
+              {bestScore > 0 ? '继续营业' : '开始营业'}
+            </span>
+            <span className="ss__ticket-sub">🧋 OPEN</span>
+          </div>
         </div>
 
-        {/* Play button */}
-        <button className="ss__play" onPointerDown={onPlay}>
-          {bestScore > 0 ? '继续营业 🧋' : '开始营业 🧋'}
-        </button>
+        {/* Leaderboard button */}
+        <button className="ss__lb-btn" onPointerDown={() => setShowLb(true)}>🏆</button>
       </div>
-
       {showLb && (
         <Leaderboard
-          gameName="BOBA RUSH"
+          gameName="Boba Rush"
           isInAigram={isInAigram}
           onClose={() => setShowLb(false)}
           fetchGlobal={fetchGlobal}
