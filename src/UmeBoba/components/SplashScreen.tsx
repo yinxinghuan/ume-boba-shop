@@ -1,23 +1,12 @@
 import React, { forwardRef, useCallback, useEffect, useRef, useState } from 'react'
 import posterImg from '../img/poster.png'
 
-import imgUme    from '../img/ume_counter.png'
-import imgLogo   from '../img/ume_logo.png'
-import imgBgShop from '../img/bg_shop.png'
-import imgCup    from '../img/cup.png'
-
 import './SplashScreen.less'
 
-const GAME_IMAGES: string[] = [
-  imgUme,
-  imgLogo,
-  imgBgShop,
-  imgCup,
-  new URL('../img/guides/yoome_happy.png',      import.meta.url).href,
-  new URL('../img/guides/yoome_normal.png',     import.meta.url).href,
-  new URL('../img/guides/melonmick_happy.png',  import.meta.url).href,
-  new URL('../img/guides/lemonshark_happy.png', import.meta.url).href,
-]
+// Preload all game images (excluding poster which is already the splash image)
+const _allImgModules = import.meta.glob('../img/**/*.png', { eager: true, query: '?url', import: 'default' })
+const GAME_IMAGES: string[] = (Object.values(_allImgModules) as string[])
+  .filter(url => !url.includes('poster'))
 
 const MIN_MS = 2200
 const MAX_ASSET_MS = 10000
