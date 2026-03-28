@@ -2,12 +2,19 @@ import { useCallback, useEffect, useRef, useState } from 'react'
 import { TUTORIAL_STEPS, TUTORIAL_DONE_KEY } from '../tutorial'
 import type { GameSave } from '../types'
 
-export function useTutorial(save: GameSave, progress: Record<string, number>, loaded: boolean) {
-  const isDone = typeof localStorage !== 'undefined'
-    && !!localStorage.getItem(TUTORIAL_DONE_KEY)
+export function useTutorial(
+  save: GameSave,
+  progress: Record<string, number>,
+  loaded: boolean,
+  onMarkDone: () => void,
+) {
+  const isDone = !!save.tutorialDone
+    || (typeof localStorage !== 'undefined' && !!localStorage.getItem(TUTORIAL_DONE_KEY))
 
   const [stepIndex, setStepIndex] = useState(0)
   const [tutDone, setTutDone] = useState(isDone)
+  const onMarkDoneRef = useRef(onMarkDone)
+  onMarkDoneRef.current = onMarkDone
 
   useEffect(() => {
     console.log('[Tutorial] init — isDone:', isDone, 'stepIndex:', stepIndex)
@@ -24,6 +31,7 @@ export function useTutorial(save: GameSave, progress: Record<string, number>, lo
       const next = i + 1
       if (next >= TUTORIAL_STEPS.length) {
         localStorage.setItem(TUTORIAL_DONE_KEY, '1')
+        onMarkDoneRef.current()
         setTutDone(true)
         return i
       }
@@ -97,6 +105,7 @@ export function useTutorial(save: GameSave, progress: Record<string, number>, lo
 
   const skip = useCallback(() => {
     localStorage.setItem(TUTORIAL_DONE_KEY, '1')
+    onMarkDoneRef.current()
     setTutDone(true)
   }, [])
 

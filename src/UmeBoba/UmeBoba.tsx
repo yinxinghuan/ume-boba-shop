@@ -97,7 +97,10 @@ export default function UmeBoba() {
   const shopImages = useShopImage(save.totalEarned, aigramUser?.head_url ?? null, loaded)
 
   const { guide, dismissGuide } = useGuide(save, loaded)
-  const { tutStep, tutDone, advanceTut, skipTut } = useTutorial(save, progress, loaded)
+  const { tutStep, tutDone, advanceTut, skipTut } = useTutorial(
+    save, progress, loaded,
+    () => setSave(s => ({ ...s, tutorialDone: true })),
+  )
 
   // Update rects when tutorial needs highlights
   useEffect(() => {
@@ -173,6 +176,7 @@ export default function UmeBoba() {
         bestScore={initSave.totalEarned}
         isInAigram={isInAigram}
         onPlay={() => setScreen('playing')}
+        onReset={() => { setSave(defaultSave()); localStorage.removeItem('ume-boba-tutorial-done') }}
         fetchGlobal={fetchGlobalLeaderboard}
         fetchFriends={fetchFriendsLeaderboard}
       />

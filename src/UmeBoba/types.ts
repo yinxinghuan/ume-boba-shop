@@ -31,4 +31,5 @@ export interface GameSave {
   totalEarned: number
   drinks: Record<string, DrinkProgress>
   lastActive: number
+  tutorialDone?: boolean
 }

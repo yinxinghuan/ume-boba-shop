@@ -10,13 +10,15 @@ interface Props {
   playerAvatar: string | null
   bestScore:    number
   isInAigram:   boolean
-  onPlay: () => void
+  onPlay:   () => void
+  onReset:  () => void
   fetchGlobal:  () => Promise<LeaderboardEntry[]>
   fetchFriends: () => Promise<LeaderboardEntry[]>
 }
 
-export default function StartScreen({ playerName, playerAvatar, bestScore, isInAigram, onPlay, fetchGlobal, fetchFriends }: Props) {
+export default function StartScreen({ playerName, playerAvatar, bestScore, isInAigram, onPlay, onReset, fetchGlobal, fetchFriends }: Props) {
   const [showLb, setShowLb] = useState(false)
+  const [showReset, setShowReset] = useState(false)
   return (
     <div className="ss">
       {/* Subtle radial glow */}
@@ -61,9 +63,30 @@ export default function StartScreen({ playerName, playerAvatar, bestScore, isInA
           </div>
         </div>
 
+        {/* Reset button — only when there's a previous save */}
+        {bestScore > 0 && (
+          <button className="ss__reset-btn" onPointerDown={() => setShowReset(true)}>
+            重新开始
+          </button>
+        )}
+
         {/* Leaderboard button */}
         <button className="ss__lb-btn" onPointerDown={() => setShowLb(true)}>🏆</button>
       </div>
+      {/* Reset confirm dialog */}
+      {showReset && (
+        <div className="ss__confirm-overlay" onPointerDown={() => setShowReset(false)}>
+          <div className="ss__confirm" onPointerDown={e => e.stopPropagation()}>
+            <div className="ss__confirm-title">重新开始？</div>
+            <div className="ss__confirm-body">当前进度将会清空，无法恢复。</div>
+            <div className="ss__confirm-btns">
+              <button className="ss__confirm-btn ss__confirm-btn--cancel" onPointerDown={() => setShowReset(false)}>取消</button>
+              <button className="ss__confirm-btn ss__confirm-btn--ok" onPointerDown={onReset}>确认重置</button>
+            </div>
+          </div>
+        </div>
+      )}
+
       {showLb && (
         <Leaderboard
           gameName="Boba Rush"
