@@ -357,6 +357,7 @@
       align-items: center;
       justify-content: center;
       gap: 0;
+      padding-bottom: 38px; // reserve space for absolute tear + price, so flex centers in upper zone
       border-radius: 12px;
       background: rgba(255,255,255,0.25);
       color: rgba(0,0,0,0.55);
@@ -432,7 +433,6 @@
     display: block;
     font-size: 22px;
     font-weight: 900;
-    padding: 8px 0 0;
     letter-spacing: -0.5px;
     text-align: center;
     line-height: 1;
@@ -442,10 +442,9 @@
 
   &__buy-arrow {
     display: block;
-    width: 34px;
-    height: 34px;
+    width: 30px;
+    height: 30px;
     flex-shrink: 0;
-    margin: 8px 0 0;
     background: currentColor;
     position: relative;
     z-index: 1;
@@ -473,9 +472,9 @@
     bottom: 7px;
     left: 0; right: 0;
     display: block;
-    font-size: 16px;
+    font-size: 14px;
     font-weight: 900;
-    padding: 0 4px;
+    padding: 0 6px;
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
