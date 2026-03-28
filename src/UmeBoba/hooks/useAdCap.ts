@@ -42,6 +42,16 @@ export function useAdCap(
   const saveRef = useRef(save)
   saveRef.current = save
 
+  // Sync when the loaded save arrives (initialSave starts as defaultSave,
+  // then updates once after async load — we apply it exactly once)
+  const prevInitRef = useRef(initialSave)
+  useEffect(() => {
+    if (initialSave !== prevInitRef.current) {
+      prevInitRef.current = initialSave
+      setSave(initialSave)
+    }
+  }, [initialSave])
+
   // ── Progress tick ─────────────────────────────────────────────────────────
   useEffect(() => {
     const id = setInterval(() => {
