@@ -432,10 +432,12 @@
     display: block;
     font-size: 22px;
     font-weight: 900;
-    padding: 6px 0 2px;
+    padding: 8px 0 0;
     letter-spacing: -0.5px;
     text-align: center;
     line-height: 1;
+    position: relative;
+    z-index: 1;
   }
 
   &__buy-arrow {
@@ -443,14 +445,19 @@
     width: 34px;
     height: 34px;
     flex-shrink: 0;
-    margin: 10px 0 6px;
+    margin: 8px 0 0;
     background: currentColor;
+    position: relative;
+    z-index: 1;
     -webkit-mask: url('../img/icon_arrow_upward.svg') center / contain no-repeat;
     mask: url('../img/icon_arrow_upward.svg') center / contain no-repeat;
   }
 
-  // Round dots tear line
+  // Round dots tear line — fixed position above price
   &__buy-tear {
+    position: absolute;
+    bottom: 38px;
+    left: 5%;
     width: 90%;
     height: 4px;
     background: radial-gradient(circle at center, currentColor 2px, transparent 2px);
@@ -458,18 +465,23 @@
     background-repeat: repeat-x;
     background-position: 0 50%;
     opacity: 0.9;
-    flex-shrink: 0;
   }
 
+  // Price pinned to bottom — matches dr__hire-cost
   &__buy-price {
+    position: absolute;
+    bottom: 7px;
+    left: 0; right: 0;
     display: block;
     font-size: 16px;
     font-weight: 900;
-    padding: 7px 4px 7px;
+    padding: 0 4px;
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
     letter-spacing: -0.5px;
+    text-align: center;
+    z-index: 1;
   }
 }
 
