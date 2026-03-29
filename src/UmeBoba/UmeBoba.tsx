@@ -139,7 +139,7 @@ export default function UmeBoba() {
   // Total per-second rate (includes shop multiplier)
   const perSec = DRINKS.reduce((sum, def) => {
     const dp = save.drinks[def.id]
-    if (!dp || dp.qty === 0 || !dp.hasManager) return sum
+    if (!dp || dp.qty === 0) return sum
     const ms = cycleMs(def, dp.qty)
     return sum + (incomePerCycle(def, dp.qty, effectiveMult) / ms * 1000)
   }, 0)
