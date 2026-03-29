@@ -3,12 +3,12 @@ import { t } from './i18n'
 
 // ── Shop levels ────────────────────────────────────────────────────────────────
 export const SHOP_LEVELS: ShopLevel[] = [
-  { level: 1, nameZh: '路边小摊',     nameEn: 'Street Stall',        threshold: 0,           multiplier: 1,    unlockDrinkId: 'pearl_milk_tea' },
-  { level: 2, nameZh: '小奶茶铺',     nameEn: 'Boba Kiosk',          threshold: 5_000,       multiplier: 1.5,  unlockDrinkId: 'watermelon'     },
-  { level: 3, nameZh: '城市旗舰店',   nameEn: 'City Flagship',       threshold: 40_000,      multiplier: 2,    unlockDrinkId: 'mango'          },
-  { level: 4, nameZh: '跨国连锁集团', nameEn: 'Global Chain',        threshold: 250_000,     multiplier: 3,    unlockDrinkId: 'lemon'          },
-  { level: 5, nameZh: '星际奶茶公司', nameEn: 'Galactic Boba Corp',  threshold: 1_500_000,   multiplier: 4,    unlockDrinkId: 'avocado'        },
-  { level: 6, nameZh: '月球旗舰站',   nameEn: 'Lunar Flagship',      threshold: 10_000_000,  multiplier: 6,    unlockDrinkId: 'angel'          },
+  { level: 1, nameZh: '路边小摊',     nameEn: 'Street Stall',        threshold: 0,             multiplier: 1,    unlockDrinkId: 'pearl_milk_tea' },
+  { level: 2, nameZh: '小奶茶铺',     nameEn: 'Boba Kiosk',          threshold: 50_000,        multiplier: 1.5,  unlockDrinkId: 'watermelon'     },
+  { level: 3, nameZh: '城市旗舰店',   nameEn: 'City Flagship',       threshold: 500_000,       multiplier: 2,    unlockDrinkId: 'mango'          },
+  { level: 4, nameZh: '跨国连锁集团', nameEn: 'Global Chain',        threshold: 4_000_000,     multiplier: 3,    unlockDrinkId: 'lemon'          },
+  { level: 5, nameZh: '星际奶茶公司', nameEn: 'Galactic Boba Corp',  threshold: 25_000_000,    multiplier: 4,    unlockDrinkId: 'avocado'        },
+  { level: 6, nameZh: '月球旗舰站',   nameEn: 'Lunar Flagship',      threshold: 200_000_000,   multiplier: 6,    unlockDrinkId: 'angel'          },
 ]
 
 export function getShopLevel(totalEarned: number): ShopLevel {
@@ -32,11 +32,11 @@ export const DRINKS: DrinkDef[] = [
     nameZh: '珍珠奶茶',
     nameEn: 'Pearl Milk Tea',
     color: '#f8a4c8',
-    baseCycleMs: 3_000,
+    baseCycleMs: 5_000,
     baseIncome: 8,
     buyCostBase: 12,
     buyCostMult: 1.18,
-    managerCost: 3_000,
+    managerCost: 50_000,
     unlockCost: 0,
     milestones: [10, 25, 50, 100],
   },
@@ -50,8 +50,8 @@ export const DRINKS: DrinkDef[] = [
     baseIncome: 40,
     buyCostBase: 200,
     buyCostMult: 1.16,
-    managerCost: 60_000,
-    unlockCost: 5_000,
+    managerCost: 600_000,
+    unlockCost: 50_000,
     milestones: [10, 25, 50, 100],
   },
   {
@@ -64,8 +64,8 @@ export const DRINKS: DrinkDef[] = [
     baseIncome: 160,
     buyCostBase: 3_000,
     buyCostMult: 1.15,
-    managerCost: 300_000,
-    unlockCost: 40_000,
+    managerCost: 3_000_000,
+    unlockCost: 500_000,
     milestones: [10, 25, 50, 100],
   },
   {
@@ -78,8 +78,8 @@ export const DRINKS: DrinkDef[] = [
     baseIncome: 700,
     buyCostBase: 40_000,
     buyCostMult: 1.14,
-    managerCost: 1_500_000,
-    unlockCost: 250_000,
+    managerCost: 15_000_000,
+    unlockCost: 4_000_000,
     milestones: [10, 25, 50, 100],
   },
   {
@@ -92,8 +92,8 @@ export const DRINKS: DrinkDef[] = [
     baseIncome: 3_500,
     buyCostBase: 500_000,
     buyCostMult: 1.13,
-    managerCost: 7_000_000,
-    unlockCost: 1_500_000,
+    managerCost: 70_000_000,
+    unlockCost: 25_000_000,
     milestones: [10, 25, 50, 100],
   },
   {
@@ -106,8 +106,8 @@ export const DRINKS: DrinkDef[] = [
     baseIncome: 20_000,
     buyCostBase: 6_000_000,
     buyCostMult: 1.12,
-    managerCost: 35_000_000,
-    unlockCost: 10_000_000,
+    managerCost: 350_000_000,
+    unlockCost: 200_000_000,
     milestones: [10, 25, 50, 100],
   },
 ]
@@ -163,7 +163,7 @@ export function incomePerCycle(def: DrinkDef, qty: number, shopMult = 1): number
 // ── Prestige ──────────────────────────────────────────────────────────────────
 
 /** Minimum totalEarned to trigger prestige */
-export const PRESTIGE_THRESHOLD = 1_000_000_000
+export const PRESTIGE_THRESHOLD = 10_000_000_000
 
 /** Moon crystals earned from a prestige at the given totalEarned */
 export function prestigeGain(totalEarned: number): number {
