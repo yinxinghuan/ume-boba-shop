@@ -103,18 +103,19 @@ export default function UmeBoba() {
 
   function doPrestige() {
     const gain = prestigeGain(save.totalEarned)
-    const prevPrestige = save.prestige ?? 0
-    setSave(s => ({
-      ...s,
+    const newSave: GameSave = {
+      ...save,
       coins: 0,
       totalEarned: 0,
-      prestige: prevPrestige + gain,
+      prestige: (save.prestige ?? 0) + gain,
       tutorialDone: true,
       drinks: Object.fromEntries(
         DRINKS.map(d => [d.id, { qty: d.id === 'pearl_milk_tea' ? 1 : 0, cycleStarted: 0, hasManager: false }])
       ),
       lastActive: Date.now(),
-    }))
+    }
+    setSave(newSave)
+    persist(newSave)
     setShowPrestige(false)
   }
 
