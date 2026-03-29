@@ -85,9 +85,19 @@ export function useGuide(save: GameSave, loaded: boolean) {
   const prevTotalRef   = useRef(0)
   const prevCoinsRef   = useRef(0)
   const prevDrinksRef  = useRef<GameSave['drinks']>({})
+  const isFirstRunRef  = useRef(true)
 
   useEffect(() => {
     if (!loaded) return
+
+    // On first load, silently sync baselines so offline milestones don't all fire at once
+    if (isFirstRunRef.current) {
+      isFirstRunRef.current = false
+      prevTotalRef.current  = save.totalEarned
+      prevCoinsRef.current  = save.coins
+      prevDrinksRef.current = JSON.parse(JSON.stringify(save.drinks))
+      return
+    }
 
     const prevTotal  = prevTotalRef.current
     const total      = save.totalEarned
