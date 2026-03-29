@@ -14,7 +14,7 @@ import TutorialLayer from './components/TutorialLayer'
 import Leaderboard from './components/Leaderboard'
 import ShopView from './components/ShopView'
 import HelpPanel from './components/HelpPanel'
-import { DRINKS, fmt, fmtUSD, incomePerCycle, cycleMs, getShopLevel, prestigeGain, prestigeMultiplier, PRESTIGE_THRESHOLD } from './constants'
+import { DRINKS, fmt, fmtUSD, fmtRate, incomePerCycle, cycleMs, getShopLevel, prestigeGain, prestigeMultiplier, PRESTIGE_THRESHOLD } from './constants'
 import { t, localeName } from './i18n'
 import { playUnlock, isMuted, setMuted } from './utils/sounds'
 import type { GameSave } from './types'
@@ -238,7 +238,7 @@ export default function UmeBoba() {
           )}
           <div className="ub__coins">{fmtUSD(save.coins)}</div>
           {perSec >= 0.1 && (
-            <div className="ub__per-sec">+{fmtUSD(perSec)}{t('per_sec')}</div>
+            <div className="ub__per-sec">+{fmtRate(perSec)}{t('per_sec')}</div>
           )}
         </div>
         <div className="ub__hud-right">

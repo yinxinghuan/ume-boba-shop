@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
 import type { DrinkDef, DrinkProgress } from '../types'
-import { buyCost, maxBuyQty, cycleMs, fmtUSD, fmtMs, incomePerCycle } from '../constants'
+import { buyCost, maxBuyQty, cycleMs, fmtUSD, fmtRate, fmtMs, incomePerCycle } from '../constants'
 import { t, localeName } from '../i18n'
 import './DrinkRow.less'
 
@@ -124,7 +124,7 @@ export default function DrinkRow({
       <div className="dr__center">
         <div className="dr__meta">
           {dp.qty > 0
-            ? <span className="dr__income">{fmtUSD(income / ms * 1000)}<em>{t('per_sec')}</em></span>
+            ? <span className="dr__income">{fmtRate(income / ms * 1000)}<em>{t('per_sec')}</em></span>
             : <span className="dr__name">{localeName(def)}</span>
           }
           {dp.qty > 0 && <span className="dr__name dr__name--meta">{localeName(def)}</span>}

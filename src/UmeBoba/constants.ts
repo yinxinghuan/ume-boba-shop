@@ -189,6 +189,16 @@ export function fmtUSD(n: number): string {
   return '$' + fmt(n)
 }
 
+/** Format a per-second rate — keeps 1 decimal for values under 10 */
+export function fmtRate(n: number): string {
+  if (n >= 1e12) return '$' + (n / 1e12).toFixed(2) + 'T'
+  if (n >= 1e9)  return '$' + (n / 1e9).toFixed(2) + 'B'
+  if (n >= 1e6)  return '$' + (n / 1e6).toFixed(2) + 'M'
+  if (n >= 1e3)  return '$' + (n / 1e3).toFixed(1) + 'K'
+  if (n >= 10)   return '$' + Math.floor(n)
+  return '$' + n.toFixed(1)
+}
+
 /** Format cycle duration */
 export function fmtMs(ms: number): string {
   if (ms >= 60_000) return (ms / 60_000).toFixed(1) + t('min')
