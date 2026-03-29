@@ -51,7 +51,7 @@ export default function UmeBoba() {
   const { load, persist } = useSave(telegramId)
   const aigramUser = useAigramUser(apiOrigin, telegramId)
   const { isInAigram, submitScore, fetchGlobalLeaderboard, fetchFriendsLeaderboard } =
-    useGameScore('ume-boba-shop')
+    useGameScore('boba-rush')
 
   const [screen, setScreen] = useState<Screen>('splash')
   const [initSave, setInitSave] = useState<GameSave>(defaultSave())
