@@ -46,9 +46,10 @@ function callAigramAPI<T>(
   return new Promise((resolve, reject) => {
     const requestId = crypto.randomUUID();
     let timer: ReturnType<typeof setTimeout>;
+    const targetOrigin = new URL(apiOrigin).origin;
 
     const handler = (event: MessageEvent) => {
-      if (event.origin !== apiOrigin) return;
+      if (event.origin !== targetOrigin) return;
       const msg = typeof event.data === 'string' ? event.data : '';
       if (!msg.startsWith('callAPIResult-')) return;
       try {
@@ -70,7 +71,7 @@ function callAigramAPI<T>(
         request_id: requestId,
         emitter: window.location.origin,
       }))}`,
-      apiOrigin
+      targetOrigin
     );
     timer = setTimeout(() => {
       window.removeEventListener('message', handler);
