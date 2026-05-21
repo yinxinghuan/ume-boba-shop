@@ -1,6 +1,6 @@
 import { type CSSProperties, useEffect, useState } from 'react';
-import { openAigramProfile } from '@shared/runtime';
-import type { LeaderboardEntry } from '../hooks/useGameScore';
+import { openAigramProfile } from '../runtime/bridge';
+import type { LeaderboardEntry } from './useGameScore';
 import './Leaderboard.less';
 
 // ─── Built-in i18n (no dependency on game's i18n) ────────────────────────
@@ -28,6 +28,8 @@ function detectLang(): 'zh' | 'en' {
 
 const s = STRINGS[detectLang()];
 
+// ─── Sub-components ───────────────────────────────────────────────────────
+
 function Avatar({ url, name, size = 40 }: { url: string; name: string; size?: number }) {
   return (
     <div className="lb-avatar" style={{ width: size, height: size, fontSize: size * 0.38 }}>
@@ -39,6 +41,8 @@ function Avatar({ url, name, size = 40 }: { url: string; name: string; size?: nu
   );
 }
 
+// ─── Props ────────────────────────────────────────────────────────────────
+
 interface Props {
   gameName: string;
   isInAigram: boolean;
@@ -48,6 +52,8 @@ interface Props {
 
 const MEDALS = ['🥇', '🥈', '🥉'];
 const MEDAL_COLORS = ['#FFD700', '#C0C0C0', '#CD7F32'];
+
+// ─── Component ────────────────────────────────────────────────────────────
 
 export default function Leaderboard({ gameName, isInAigram, onClose, fetch }: Props) {
   const [entries, setEntries] = useState<LeaderboardEntry[]>([]);
@@ -66,6 +72,7 @@ export default function Leaderboard({ gameName, isInAigram, onClose, fetch }: Pr
     <div className="lb-backdrop" onPointerDown={e => { if (e.target === e.currentTarget) onClose(); }}>
       <div className="lb-panel">
 
+        {/* Header */}
         <div className="lb-header">
           <div className="lb-header__left">
             <span className="lb-header__icon">🏆</span>
@@ -77,6 +84,7 @@ export default function Leaderboard({ gameName, isInAigram, onClose, fetch }: Pr
           <button className="lb-close" onPointerDown={onClose}>✕</button>
         </div>
 
+        {/* List */}
         <div className="lb-body">
           {loading && (
             <div className="lb-state">
@@ -96,7 +104,7 @@ export default function Leaderboard({ gameName, isInAigram, onClose, fetch }: Pr
               key={entry.user_id}
               className={`lb-row ${entry.isMe ? 'lb-row--me' : ''} ${i < 3 ? 'lb-row--top' : ''} ${isInAigram ? 'lb-row--clickable' : ''}`}
               style={i < 3 ? { '--medal-color': MEDAL_COLORS[i] } as CSSProperties : undefined}
-              onPointerDown={isInAigram ? () => openAigramProfile(entry.user_id) : undefined}
+              onClick={isInAigram ? () => openAigramProfile(entry.user_id) : undefined}
             >
               <div className="lb-row__rank">
                 {i < 3

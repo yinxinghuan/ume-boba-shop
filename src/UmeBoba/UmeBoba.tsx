@@ -50,8 +50,8 @@ export default function UmeBoba() {
 
   const { load, persist } = useSave(telegramId)
   const aigramUser = useAigramUser(apiOrigin, telegramId)
-  const { isInAigram, submitScore, fetchGlobalLeaderboard, fetchFriendsLeaderboard } =
-    useGameScore('boba-rush')
+  const { isInAigram, submitScore, fetchLeaderboard } =
+    useGameScore()
 
   const [screen, setScreen] = useState<Screen>('splash')
   const [initSave, setInitSave] = useState<GameSave>(defaultSave())
@@ -208,8 +208,7 @@ export default function UmeBoba() {
           setShowOffline(false)
           localStorage.removeItem('ume-boba-tutorial-done')
         }}
-        fetchGlobal={fetchGlobalLeaderboard}
-        fetchFriends={fetchFriendsLeaderboard}
+        fetch={fetchLeaderboard}
       />
     )
   }
@@ -363,8 +362,7 @@ export default function UmeBoba() {
           gameName={t('game_name')}
           isInAigram={isInAigram}
           onClose={() => setShowLb(false)}
-          fetchGlobal={fetchGlobalLeaderboard}
-          fetchFriends={fetchFriendsLeaderboard}
+          fetch={fetchLeaderboard}
         />
       )}
 

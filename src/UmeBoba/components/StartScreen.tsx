@@ -14,11 +14,10 @@ interface Props {
   isInAigram:   boolean
   onPlay:   () => void
   onReset:  () => void
-  fetchGlobal:  () => Promise<LeaderboardEntry[]>
-  fetchFriends: () => Promise<LeaderboardEntry[]>
+  fetch: () => Promise<LeaderboardEntry[]>
 }
 
-export default function StartScreen({ playerName, playerAvatar, bestScore, hasSave, isInAigram, onPlay, onReset, fetchGlobal, fetchFriends }: Props) {
+export default function StartScreen({ playerName, playerAvatar, bestScore, hasSave, isInAigram, onPlay, onReset, fetch }: Props) {
   const [showLb, setShowLb] = useState(false)
   const [showReset, setShowReset] = useState(false)
   return (
@@ -94,8 +93,7 @@ export default function StartScreen({ playerName, playerAvatar, bestScore, hasSa
           gameName={t('game_name')}
           isInAigram={isInAigram}
           onClose={() => setShowLb(false)}
-          fetchGlobal={fetchGlobal}
-          fetchFriends={fetchFriends}
+          fetch={fetch}
         />
       )}
     </div>
