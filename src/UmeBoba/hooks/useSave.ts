@@ -1,25 +1,39 @@
 import { useCallback } from 'react'
+import {
+  callAigramAPI,
+  postAigramAPI,
+  getGameUuid,
+  type AigramResponse,
+} from '@shared/runtime'
 import type { GameSave } from '../types'
 import { calcOffline } from './useAdCap'
 
 const GAME_ID = 'ume-boba-shop'
-const API_BASE = 'https://games-api.xinghuan-yin.workers.dev'
+
+interface SaveRow {
+  user_id: string
+  time: string
+  resource_data: string
+}
 
 export function useSave(telegramId: string | null) {
   const load = useCallback(async (): Promise<{ save: GameSave; offlineCoins: number }> => {
     const { defaultSave } = await import('./useAdCap')
-    try {
-      if (telegramId) {
-        const res = await fetch(`${API_BASE}/save?game_id=${GAME_ID}&telegram_id=${telegramId}`)
-        if (res.ok) {
-          const json = await res.json()
-          if (json.data) {
-            const save: GameSave = JSON.parse(json.data)
-            return { save, offlineCoins: calcOffline(save) }
-          }
+    const sessionId = getGameUuid()
+
+    if (telegramId && sessionId) {
+      try {
+        const res = await callAigramAPI<AigramResponse<SaveRow[]>>(
+          `/note/aigram/ai/game/get/data/list?session_id=${encodeURIComponent(sessionId)}`,
+        )
+        const rows: SaveRow[] = Array.isArray(res?.data) ? res.data : []
+        const mine = rows.find(r => r.user_id === telegramId)
+        if (mine && mine.resource_data) {
+          const save: GameSave = JSON.parse(mine.resource_data)
+          return { save, offlineCoins: calcOffline(save) }
         }
-      }
-    } catch { /* fall through */ }
+      } catch { /* fall through */ }
+    }
     try {
       const raw = localStorage.getItem(`${GAME_ID}-save`)
       if (raw) {
@@ -33,14 +47,12 @@ export function useSave(telegramId: string | null) {
   const persist = useCallback(async (save: GameSave) => {
     const withTs = { ...save, lastActive: Date.now() }
     localStorage.setItem(`${GAME_ID}-save`, JSON.stringify(withTs))
-    if (telegramId) {
-      try {
-        await fetch(`${API_BASE}/save`, {
-          method: 'PUT',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ game_id: GAME_ID, telegram_id: telegramId, data: JSON.stringify(withTs) }),
-        })
-      } catch { /* ignore */ }
+    const sessionId = getGameUuid()
+    if (telegramId && sessionId) {
+      postAigramAPI('/note/aigram/ai/game/save/data', {
+        session_id: sessionId,
+        resource_data: JSON.stringify(withTs),
+      })
     }
   }, [telegramId])
 

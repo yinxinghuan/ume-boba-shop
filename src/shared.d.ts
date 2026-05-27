@@ -50,4 +50,17 @@ declare module '@shared/runtime' {
   export const api_origin: string | null;
   export const telegramId: string | null;
   export const isInAigram: boolean;
+
+  export interface AigramResponse<T = unknown> {
+    retcode: number;
+    errcode?: number;
+    msg: string;
+    data: T;
+  }
+  export function callAigramAPI<T = unknown>(
+    url: string,
+    method?: 'GET' | 'POST',
+    data?: unknown,
+  ): Promise<T>;
+  export function postAigramAPI(url: string, data: unknown): void;
 }
