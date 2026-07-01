@@ -10,11 +10,15 @@ const STRINGS = {
     title: '排行榜',
     me: '我',
     empty: '暂无记录，快来第一个上榜！',
+    openInAlterU: '在 AlterU 中打开即可查看排行榜',
+    downloadAlterU: '下载 AlterU',
   },
   en: {
     title: 'Leaderboard',
     me: 'me',
     empty: 'No records yet. Be the first!',
+    openInAlterU: 'Open in AlterU to view the leaderboard.',
+    downloadAlterU: 'Get AlterU on the App Store',
   },
 } as const;
 
@@ -48,19 +52,26 @@ interface Props {
 
 const MEDALS = ['🥇', '🥈', '🥉'];
 const MEDAL_COLORS = ['#FFD700', '#C0C0C0', '#CD7F32'];
+const ALTERU_APP_URL = 'https://apps.apple.com/app/id6769646546';
 
 export default function Leaderboard({ gameName, isInAigram, onClose, fetch }: Props) {
   const [entries, setEntries] = useState<LeaderboardEntry[]>([]);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
+    if (!isInAigram) {
+      setEntries([]);
+      setLoading(false);
+      return;
+    }
+
     let alive = true;
     setLoading(true);
     fetch()
       .then(data => { if (alive) setEntries(data); })
       .finally(() => { if (alive) setLoading(false); });
     return () => { alive = false; };
-  }, [fetch]);
+  }, [fetch, isInAigram]);
 
   return (
     <div className="lb-backdrop" onPointerDown={e => { if (e.target === e.currentTarget) onClose(); }}>
@@ -84,19 +95,34 @@ export default function Leaderboard({ gameName, isInAigram, onClose, fetch }: Pr
             </div>
           )}
 
-          {!loading && entries.length === 0 && (
+          {!loading && !isInAigram && (
+            <div className="lb-state lb-state--download">
+              <span className="lb-state__icon">🏆</span>
+              <span className="lb-state__text">{s.openInAlterU}</span>
+              <a
+                className="lb-state__download"
+                href={ALTERU_APP_URL}
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                {s.downloadAlterU}
+              </a>
+            </div>
+          )}
+
+          {!loading && isInAigram && entries.length === 0 && (
             <div className="lb-state">
               <span className="lb-state__icon">🎮</span>
               <span className="lb-state__text">{s.empty}</span>
             </div>
           )}
 
-          {!loading && entries.map((entry, i) => (
+          {!loading && isInAigram && entries.map((entry, i) => (
             <div
               key={entry.user_id}
               className={`lb-row ${entry.isMe ? 'lb-row--me' : ''} ${i < 3 ? 'lb-row--top' : ''} ${isInAigram ? 'lb-row--clickable' : ''}`}
               style={i < 3 ? { '--medal-color': MEDAL_COLORS[i] } as CSSProperties : undefined}
-              onPointerDown={isInAigram ? () => openAigramProfile(entry.user_id) : undefined}
+              onClick={isInAigram ? () => openAigramProfile(entry.user_id) : undefined}
             >
               <div className="lb-row__rank">
                 {i < 3
